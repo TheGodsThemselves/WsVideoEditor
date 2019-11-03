@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/playerViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="top"
+        android:orientation="horizontal">
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/controlViewLayout"
+        android:layout_below="@+id/playerViewLayout"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/btnPlayVideo"
+            android:text="Pause"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content" />
+        <SeekBar
+            android:id="@+id/seekBarVideo"
+            android:progressTint="#000055"
+            android:thumbTint="#000055"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

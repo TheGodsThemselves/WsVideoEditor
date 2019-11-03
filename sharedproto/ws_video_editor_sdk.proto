@@ -1,0 +1,114 @@
+syntax = "proto3";
+package whensunset.wsvideoeditor.model;
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.whensunset.wsvideoeditorsdk.model";
+option java_multiple_files = true;
+
+// 用于保存一段时间，单位是秒
+message TimeRange {
+    double start = 1;
+
+    double duration = 2;
+
+    uint64 id = 3;
+}
+
+// 一个多媒体文件的一个多媒体数据流的信息
+message MediaStreamHolder {
+    // 视频的长和宽
+    int32 width = 1;
+
+    int32 height = 2;
+
+    // 编解码器的名称
+    string codec_type = 3;
+
+    // 视频的旋转角度
+    int32 rotation = 4;
+}
+
+// 储存一个多媒体文件的信息，减少反复解析的性能消耗
+message MediaFileHolder {
+    string path = 1;
+    // 文件的后缀名
+    string format_name = 2;
+
+    int32 probe_score = 3;
+
+    // 文件中的多媒体数据流的数量
+    int32 num_streams = 4;
+
+    // 文件中的多媒体数据流的信息列表
+    repeated MediaStreamHolder streams = 5;
+
+    // 文件中多媒体信息流中最优的视频流
+    int32 media_strema_index = 6;
+
+    // 文件中多媒体信息流中最优的音频流
+    int32 audio_strema_index = 7;
+
+    // 时长
+    double duration = 8;
+}
+
+// 视频/图片填充播放器的方式
+enum MediaAssetScaleType {
+    MEDIA_ASSET_SCALE_DEFAULT = 0;
+
+    MEDIA_ASSET_SCALE_FIT = 1;
+
+    MEDIA_ASSET_SCALE_FILL = 2;
+}
+
+// 表示一个多媒体素材
+message MediaAsset {
+    // 相同表示当前素材是同样的
+    uint64 asset_id = 1;
+
+    string asset_path = 2;
+
+    MediaFileHolder media_asset_file_holder = 3;
+
+    // 当前素材被剪裁的时间区域
+    repeated TimeRange clipped_time_range = 4;
+
+    // 声音大小
+    double volume = 5;
+
+    MediaAssetScaleType media_asset_scale_type = 6;
+
+    YuvAlphaType alpha_info = 7;
+}
+
+// EditorProject 被解析之后获取到的数据
+message EditorProjectPrivateData {
+    int32 project_width = 1;
+
+    int32 project_height = 2;
+
+    double project_fps = 3;
+
+    double project_duration = 4;
+
+    int32 input_media_assets_number = 5;
+}
+
+// 表示一个多媒体编辑项目
+message EditorProject {
+    int64 project_id = 1;
+
+    repeated MediaAsset media_asset = 2;
+
+    EditorProjectPrivateData private_data = 3;
+
+    // 是否填充高斯模糊
+    bool blur_padding_area = 4;
+}
+
+enum YuvAlphaType {
+    YUV_ALPHA_TYPE_NONE = 0;
+
+    YUV_ALPHA_TYPE_LEFT_RIGHT = 1;
+
+    YUV_ALPHA_TYPE_TOP_BOTTOM = 2;
+}

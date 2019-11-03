@@ -1,0 +1,2 @@
+include ':wsvideoeditor-test'
+include ':wsvideoeditor-sdk'

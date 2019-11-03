@@ -1,6 +1,0 @@
-/build
-*.iml
-.DS_Store
-/captures
-app/.externalNativeBuild/*
-.externalNativeBuild/

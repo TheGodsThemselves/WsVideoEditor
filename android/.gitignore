@@ -1,0 +1,15 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/codeStyleSettings.xml
+/.idea/libraries
+/.idea/misc.xml
+.DS_Store
+/build
+/captures
+/.idea
+/.idea/modules.xml
+app/.externalNativeBuild/*
+wsvideoeditor-sdk/.externalNativeBuild/
+wsvideoeditor-sdk/src/main/libs/armeabi-v7a
