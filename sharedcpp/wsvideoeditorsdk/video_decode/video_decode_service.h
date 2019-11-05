@@ -54,7 +54,7 @@ namespace whensunset {
              */
             void UpdateProject(const model::EditorProject &project);
 
-            DecodedFramesUnit GetRenderFrameAtPtsOrNull(double pts_sec, int get_frame_flags = 0);
+            DecodedFramesUnit GetRenderFrameAtPtsOrNull(double render_sec);
 
             /**
              * 更变解码的位置
@@ -80,7 +80,7 @@ namespace whensunset {
             }
 
         private:
-            DecodedFramesUnit GetRenderFrameAtPtsInternal(double pts_sec, int get_frame_flags = 0);
+            DecodedFramesUnit GetRenderFrameAtPtsInternal(double render_sec);
 
             /**
              * 开始运行解码线程

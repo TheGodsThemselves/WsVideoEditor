@@ -36,6 +36,7 @@ namespace whensunset {
 
             std::string origin_path_ = "";
 
+            // 是否当前的 TrackAsset 已经到了最后一帧
             bool is_drain_loop_ = false;
 
             VideoDecodeContext() {}

@@ -123,7 +123,8 @@ namespace whensunset {
                     changed_render_pos = changed_render_pos_;
                     changed_render_pos_ = -1;
                     LOGI("VideoDecodeService::DecodeThreadMain changed_render_pos:%f, project_changed:%s, stopped_:%s",
-                         changed_render_pos, BoTSt(project_changed).c_str(), BoTSt(stopped_).c_str());
+                         changed_render_pos, BoTSt(project_changed).c_str(),
+                         BoTSt(stopped_).c_str());
                 }
                 if (changed_render_pos) {
                     {
@@ -145,7 +146,8 @@ namespace whensunset {
                         LOGI("VideoDecodeService::DecodeThreadMain rpc asset changed");
                     }
                     LOGI("VideoDecodeService::DecodeThreadMain rpc current_segment:%s, seek_to_asset_index:%d, decoding_asset_index:%d",
-                         current_segment.ToString().c_str(), seek_to_asset_index, decoding_asset_index);
+                         current_segment.ToString().c_str(), seek_to_asset_index,
+                         decoding_asset_index);
                     if (project_changed || decoding_asset_changed) {
                         model::MediaAsset *asset = project.mutable_media_asset(
                                 decoding_asset_index);
@@ -265,7 +267,8 @@ namespace whensunset {
             {
                 std::unique_lock<std::mutex> lk(member_param_mutex_);
                 decode_thread_waiting_cv_.wait(lk, [this] {
-                    LOGI("VideoDecodeService::DecodeThreadMain dtw2 stopped_:%s", BoTSt(stopped_).c_str());
+                    LOGI("VideoDecodeService::DecodeThreadMain dtw2 stopped_:%s",
+                         BoTSt(stopped_).c_str());
                     return stopped_;
                 });
             }
@@ -321,13 +324,11 @@ namespace whensunset {
                     *ret = avcodec_decode_video2(ctx->codec_context_, frame.get(), &got_frame,
                                                  packet.get());
                     if (*ret < 0) {
-
                         return UniqueAVFramePtrCreateNull();
                     }
 
                     if (got_frame) {
                         if (frame->pts == AV_NOPTS_VALUE) {
-                            // some videos' packet do not have pts (like kk recorder produced videos)
                             frame->pts = av_frame_get_best_effort_timestamp(frame.get());
                         }
                         ctx->current_pts_ = frame->pts;
@@ -341,102 +342,70 @@ namespace whensunset {
             }
         }
 
+        /**
+         * TODO WhenSunset 可以优化为：在一些不需要 seek 的时候不进行 seek，
+         * @param ctx
+         * @param render_pos
+         * @return
+         */
         int VideoDecodeService::SeekTo(VideoDecodeContext *ctx, double render_pos) {
             ctx->is_drain_loop_ = false;
-            int64_t current_dts = ctx->current_pts_ + NoPtsToZero(ctx->video_stream_->first_dts);
-            // Notice, do not add 0.5 for rounding the dts, we just get the floor value. Otherwise, bfr may loss the first frame (when seeked).
             int64_t target_dts = (int64_t) (render_pos / av_q2d(ctx->video_stream_->time_base))
                                  + NoPtsToZero(ctx->video_stream_->first_dts);
-
-            // Quick fix: 57s bfr seek to the last two dts might incur av_seek_frame return -22 (invalid argument)
-            // Here quick fix, bfr seek target_dts - 3
-            std::string ext;
-            size_t dot_index = ctx->origin_path_.rfind(".");
-            if (dot_index != std::string::npos) {
-                ext = ctx->origin_path_.substr(dot_index + 1);
+            int ret = av_seek_frame(ctx->format_context_, ctx->video_stream_idx_, target_dts,
+                                    AVSEEK_FLAG_BACKWARD);
+            if (ret < 0) {
+                // 如果在 AVSEEK_FLAG_BACKWARD 情况下 seek 失败了， 那么去掉 AVSEEK_FLAG_BACKWARD 再 seek 一次，MPEG-4 文件解码的时候发生过
+                ret = av_seek_frame(ctx->format_context_, ctx->video_stream_idx_, target_dts, 0);
             }
-
-            int target_gop = -1, current_gop = -1;
-            if (ctx->has_gop_structure_) {
-                int i = 0;
-                for (i = 0;
-                     i < ctx->keyframe_dts_.size() && ctx->keyframe_dts_[i] <= target_dts; ++i);
-                target_gop = i - 1;
-                for (i = 0;
-                     i < ctx->keyframe_dts_.size() && ctx->keyframe_dts_[i] <= current_dts; ++i);
-                current_gop = i - 1;
+            if (ret < 0) {
+                return ret;
             }
-
-            // If target is in the same GoP and  target_dts >= last decoded frame's PTS + 5 frames safe boundary,
-            // we can let it decode sequentially to the target
-            int64_t no_seek_safe_timestamp = current_dts +
-                                             av_rescale_q(5, ctx->video_stream_->avg_frame_rate,
-                                                          ctx->video_stream_->time_base);
-
-            if (target_gop != current_gop || target_dts < no_seek_safe_timestamp ||
-                !ctx->has_gop_structure_) {
-                int ret = av_seek_frame(ctx->format_context_, ctx->video_stream_idx_, target_dts,
-                                        AVSEEK_FLAG_BACKWARD);
-                if (ret < 0) {
-                    // seeking with AVSEEK_FLAG_BACKWARD failed, seek again without flag
-                    // Happens when decoding MPEG-4 encoded files
-                    ret = av_seek_frame(ctx->format_context_, ctx->video_stream_idx_, target_dts,
-                                        0);
-                }
-                if (ret < 0) {
-                    return ret;
-                }
-                avcodec_flush_buffers(ctx->codec_context_);
-            }
+            avcodec_flush_buffers(ctx->codec_context_);
             return 0;
         }
 
-        DecodedFramesUnit VideoDecodeService::GetRenderFrameAtPtsOrNull(double pts_sec,
-                                                                        int get_frame_flags) {
+        DecodedFramesUnit VideoDecodeService::GetRenderFrameAtPtsOrNull(double render_sec) {
             std::lock_guard<std::mutex> pop_frame_lk(pop_frame_mutex_);
             std::lock_guard<std::mutex> lock(member_param_mutex_);
             DecodedFramesUnit unit = DecodedFramesUnitCreateNull();
             if (stopped_) {
                 return unit;
             }
-            return GetRenderFrameAtPtsInternal(pts_sec, get_frame_flags);
+            return GetRenderFrameAtPtsInternal(render_sec);
         }
 
-// If frames in queue has PTS 5, 6, 7, 8, ... and the client gets render frame at 0
-// The frame will never be available, in this case, null is returned and *no_such_frame is set to true;
         DecodedFramesUnit
-        VideoDecodeService::GetRenderFrameAtPtsInternal(double pts_sec, int get_frame_flags) {
-            // Assume pop_frame_mutex_ and member_param_mutex_ are held
-            int64_t pts = (int64_t) (pts_sec * AV_TIME_BASE + 0.5);
+        VideoDecodeService::GetRenderFrameAtPtsInternal(double render_sec) {
+            int64_t render_pos = (int64_t) (render_sec * AV_TIME_BASE + 0.5);
             DecodedFramesUnit ret = DecodedFramesUnitCreateNull();
-            bool no_such_frame = true;
-
-            if (std::fabs(pts_sec - 0.0) < PTS_EPS) {
-                // first frame
-                if (decoded_unit_queue_.Size() >= 1) {
-                    bool got_frame = false;
-                    auto result = decoded_unit_queue_.PopFrontIf(
-                            [&](const std::vector<DecodedFramesUnit> &units) {
-                                if (units.size() < 1) {
-                                    return false;
-                                }
-                                double first_pts = units[0].frame->pts / (double) AV_TIME_BASE;
-                                if (std::fabs(first_pts - pts_sec) < 0.005) {
-                                    got_frame = true;
-                                    return true;
-                                }
+            LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_sec:%f, render_pos:%d",
+                 render_sec, render_pos);
+            if (std::fabs(render_sec - 0.0) < PTS_EPS && decoded_unit_queue_.Size() >= 1) {
+                bool got_frame = false;
+                auto result = decoded_unit_queue_.PopFrontIf(
+                        [&](const std::vector<DecodedFramesUnit> &units) {
+                            if (units.size() < 1) {
                                 return false;
-                            });
-                    if (got_frame) {
-                        ret = std::move(result.second);
-                        return ret;
-                    }
+                            }
+                            double first_pts = units[0].frame->pts / (double) AV_TIME_BASE;
+                            if (std::fabs(first_pts - render_sec) < 0.005) {
+                                got_frame = true;
+                                return true;
+                            }
+                            return false;
+                        });
+                LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal fetch first frame got_frame:%s",
+                     BoTSt(got_frame));
+                if (got_frame) {
+                    ret = std::move(result.second);
+                    return ret;
                 }
             }
 
             while (decoded_unit_queue_.Size() > 1 && !decoded_unit_queue_.is_closed()) {
                 bool should_discard_first_frame = false;
-                bool should_save_first_frame = false;
+                bool should_use_first_frame = false;
                 auto result = decoded_unit_queue_.PopFrontIf(
                         [&](const std::vector<DecodedFramesUnit> &units) {
                             if (units.size() <= 1) {
@@ -445,39 +414,35 @@ namespace whensunset {
                             int64_t first_pts = units[0].frame->pts;
                             int64_t second_pts = units[1].frame->pts;
 
-                            // second_pts <= pts  ==>  the first frame should be dropped
-                            should_discard_first_frame = second_pts <= pts;
-                            // first_pts <= pts and second_pts > pts  ==>  the first frame is the candidate
-                            should_save_first_frame = first_pts <= pts && second_pts > pts;
-                            // first_pts > pts  ==>  no such frame.
-                            // Note first_pts > pts will be evaluated multiple times and it should never be false
-                            no_such_frame = no_such_frame && first_pts > pts;
-
-                            // If get latest frame if lagged, always save the first frame when it's pts <= requested pts
-                            if ((get_frame_flags & 1) && first_pts <= pts) {
-                                should_discard_first_frame = false;
-                                should_save_first_frame = true;
-                            }
-
-                            return should_discard_first_frame || should_save_first_frame;
+                            should_discard_first_frame = (second_pts <= render_pos);
+                            should_use_first_frame = (first_pts <= render_pos &&
+                                                      render_pos < second_pts);
+                            LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal first_pts:%d, second_pts:%d, render_pos:%f, should_discard_first_frame:%s, should_use_first_frame:%s",
+                                 first_pts, second_pts, should_discard_first_frame,
+                                 should_use_first_frame, BoTSt(should_discard_first_frame),
+                                 BoTSt(should_use_first_frame), render_pos);
+                            return should_discard_first_frame || should_use_first_frame;
                         });
                 if (should_discard_first_frame) {
-                    // Do nothing
-                } else if (should_save_first_frame) {
+                    LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos bigger than second frame pos so first frame should discard");
+                } else if (should_use_first_frame) {
                     ret = std::move(result.second);
-                } else { // first->pts > pts
+                    LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos between first frame and second frame pos so use first frame");
+                } else {
+                    LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos smaller than first frame pos so return null");
                     return ret;
                 }
             }
 
             if (!ret && ended_ && !decoded_unit_queue_.Empty()) {
                 auto result = decoded_unit_queue_.PopFrontIf(
-                        [pts](const std::vector<DecodedFramesUnit> &units) {
-                            return units.size() > 0 && units.front().frame->pts <= pts;
+                        [render_pos](const std::vector<DecodedFramesUnit> &units) {
+                            return units.size() > 0 && units.front().frame->pts <= render_pos;
                         });
                 if (result.first) {
                     ret = std::move(result.second);
                 }
+                LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal end");
             }
 
             return ret;
