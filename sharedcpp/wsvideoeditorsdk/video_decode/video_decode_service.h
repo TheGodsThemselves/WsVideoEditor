@@ -60,7 +60,7 @@ namespace whensunset {
              * 更变解码的位置
              * @param render_pos
              */
-            void ResetDecodePosition(double render_pos);
+            void Seek(double render_pos);
 
             /**
              * 暂停解码
@@ -97,7 +97,7 @@ namespace whensunset {
              */
             UniqueAVFramePtr ReadOneFrame(VideoDecodeContext *ctx, int *ret);
 
-            int SeekTo(VideoDecodeContext *ctx, double render_pos);
+            int SeekInner(VideoDecodeContext *ctx, double render_pos);
 
             int OpenMediaAsset(VideoDecodeContext &ctx, model::MediaAsset *trackAsset);
 

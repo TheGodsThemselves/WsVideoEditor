@@ -43,11 +43,11 @@ namespace whensunset {
             decode_thread_waiting_cv_.notify_all();
         }
 
-        void VideoDecodeService::ResetDecodePosition(double render_pos) {
+        void VideoDecodeService::Seek(double render_pos) {
             std::lock_guard<std::mutex> pop_frame_lk(pop_frame_mutex_);
             std::lock_guard<std::mutex> lk(member_param_mutex_);
             if (released_) {
-                LOGI("VideoDecodeService::ResetDecodePosition released render_pos:%f", render_pos);
+                LOGI("VideoDecodeService::Seek released render_pos:%f", render_pos);
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace whensunset {
             decoded_unit_queue_.Close();
             changed_render_pos_ = render_pos;
             decode_thread_waiting_cv_.notify_all();
-            LOGI("VideoDecodeService::ResetDecodePosition render_pos:%f", render_pos);
+            LOGI("VideoDecodeService::Seek render_pos:%f", render_pos);
         }
 
         int
@@ -169,7 +169,7 @@ namespace whensunset {
                                                                                decoding_asset_index);
                     LOGI("VideoDecodeService::DecodeThreadMain rpc seek failed media_asset_frame_rate:%f, catch_up_to_sec_after_seek:%f, asset_render_pos:%d",
                          media_asset_frame_rate, catch_up_to_sec_after_seek, asset_render_pos);
-                    if (SeekTo(ctx_current.get(), asset_render_pos) < 0) {
+                    if (SeekInner(ctx_current.get(), asset_render_pos) < 0) {
                         LOGI("VideoDecodeService::DecodeThreadMain rpc seek failed");
                         break;
                     }
@@ -250,7 +250,7 @@ namespace whensunset {
                             double pos_sec = ProjectRenderPosToAssetRenderPos(project,
                                                                               current_segment.start_pos(),
                                                                               decoding_asset_index);
-                            ret = SeekTo(ctx_current.get(), pos_sec);
+                            ret = SeekInner(ctx_current.get(), pos_sec);
                             LOGI("VideoDecodeService::DecodeThreadMain open media asset pos_sec:%f, ret:%d",
                                  pos_sec, ret);
                         }
@@ -348,7 +348,7 @@ namespace whensunset {
          * @param render_pos
          * @return
          */
-        int VideoDecodeService::SeekTo(VideoDecodeContext *ctx, double render_pos) {
+        int VideoDecodeService::SeekInner(VideoDecodeContext *ctx, double render_pos) {
             ctx->is_drain_loop_ = false;
             int64_t target_dts = (int64_t) (render_pos / av_q2d(ctx->video_stream_->time_base))
                                  + NoPtsToZero(ctx->video_stream_->first_dts);
@@ -396,7 +396,7 @@ namespace whensunset {
                             return false;
                         });
                 LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal fetch first frame got_frame:%s",
-                     BoTSt(got_frame));
+                     BoTSt(got_frame).c_str());
                 if (got_frame) {
                     ret = std::move(result.second);
                     return ret;
@@ -419,8 +419,8 @@ namespace whensunset {
                                                       render_pos < second_pts);
                             LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal first_pts:%d, second_pts:%d, render_pos:%f, should_discard_first_frame:%s, should_use_first_frame:%s",
                                  first_pts, second_pts, should_discard_first_frame,
-                                 should_use_first_frame, BoTSt(should_discard_first_frame),
-                                 BoTSt(should_use_first_frame), render_pos);
+                                 should_use_first_frame, BoTSt(should_discard_first_frame).c_str(),
+                                 BoTSt(should_use_first_frame).c_str(), render_pos);
                             return should_discard_first_frame || should_use_first_frame;
                         });
                 if (should_discard_first_frame) {
@@ -479,7 +479,8 @@ namespace whensunset {
             LOGI("VideoDecodeService::Stop");
         }
 
-        std::unique_ptr<VideoDecodeService> VideoDecodeServiceCreate(int buffer_capacity) {
+        std::unique_ptr<VideoDecodeService>
+        VideoDecodeServiceCreate(int buffer_capacity) {
             VideoDecodeService *impl = new(std::nothrow)VideoDecodeService(
                     buffer_capacity);
             if (!impl) {

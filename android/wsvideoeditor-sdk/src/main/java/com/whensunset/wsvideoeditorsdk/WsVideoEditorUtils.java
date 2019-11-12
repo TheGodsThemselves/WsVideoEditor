@@ -9,6 +9,7 @@ public class WsVideoEditorUtils {
 
   public static void initJni() {
     System.loadLibrary("wsvideoeditorsdk");
+    initJniNative();
   }
 
   @Keep
@@ -34,4 +35,5 @@ public class WsVideoEditorUtils {
         break;
     }
   }
+  public static native void initJniNative();
 }

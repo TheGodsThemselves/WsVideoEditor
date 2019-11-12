@@ -43,8 +43,11 @@ namespace whensunset {
                 return !!frame;
             }
 
-            void Reset() {
-                *this = DecodedFramesUnit();
+            std::string ToString() {
+                return ("frame_timestamp_sec:" + std::to_string(frame_timestamp_sec) +
+                        ",frame_file:" +
+                        frame_file + ",frame_media_asset_index:" +
+                        std::to_string(frame_media_asset_index));
             }
 
         private:

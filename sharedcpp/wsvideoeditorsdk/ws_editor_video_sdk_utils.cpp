@@ -10,6 +10,31 @@ extern "C" {
 using namespace std;
 namespace whensunset {
     namespace wsvideoeditor {
+        static void sanitizein2(uint8_t *line) {
+            while (*line) {
+                if (*line < 0x08 || (*line > 0x0D && *line < 0x20))
+                    *line = '?';
+                line++;
+            }
+        }
+
+        static void av_log_callback2(void *ptr, int level, const char *fmt, va_list vl) {
+            int print_prefix = 1;
+            char line[1024];
+
+            if (level > av_log_get_level())
+                return;
+
+            av_log_format_line(ptr, level, fmt, vl, line, sizeof(line), &print_prefix);
+            sanitizein2((uint8_t *) line);
+        }
+
+        void InitSDK() {
+            av_register_all();
+            avfilter_register_all();
+            av_log_set_callback(av_log_callback2);
+            av_log_set_level(AV_LOG_DEBUG);
+        }
 
         int OpenMediaFile(const char *path, model::MediaFileHolder *media_file_holder) {
             if (!media_file_holder) {

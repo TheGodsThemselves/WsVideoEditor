@@ -26,7 +26,8 @@ namespace whensunset {
             AVDictionary *opts = nullptr;
             int ret = 0;
             const char *cpath = file_path.c_str();
-            LOGI("VideoDecodeContext::OpenFile has_gop_structure_:%s", has_gop_structure_);
+            LOGI("VideoDecodeContext::OpenFile has_gop_structure_:%s",
+                 BoTSt(has_gop_structure_).c_str());
             if ((ret = avformat_open_input(&format_context_, cpath, NULL, &opts)) < 0) {
                 av_dict_free(&opts);
                 LOGE("VideoDecodeContext::OpenFile open input error ret:%s", av_err2str(ret));

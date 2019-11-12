@@ -10,6 +10,7 @@ extern "C" {
 
 namespace whensunset {
     namespace wsvideoeditor {
+        void InitSDK();
 
         int OpenMediaFile(const char *path, model::MediaFileHolder *media_file_holder);
 
