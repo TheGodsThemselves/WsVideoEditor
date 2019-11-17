@@ -8,10 +8,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.whensunset.wsvideoeditorsdk.WsVideoEditorUtils;
-import com.whensunset.wsvideoeditorsdk.inner.VideoDecoderService;
+import com.whensunset.wsvideoeditorsdk.inner.VideoDecodeService;
 import com.whensunset.wsvideoeditorsdk.model.EditorProject;
 import com.whensunset.wsvideoeditorsdk.model.MediaAsset;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -32,27 +33,30 @@ public class TestActivity extends Activity {
   
   TextView showState;
   TextView showFrame;
-  VideoDecoderService mVideoDecoderService;
+  VideoDecodeService mVideoDecodeService;
   AtomicLong timestamp = new AtomicLong(0);
+  final StringBuilder stringBuilder = new StringBuilder();
+  AtomicInteger times = new AtomicInteger(1);
   
   private void initButton() {
     showState = findViewById(R.id.show_state);
     showFrame = findViewById(R.id.show_frame);
-    mVideoDecoderService = new VideoDecoderService();
-  
+    mVideoDecodeService = new VideoDecodeService(10);
+    
     final EditorProject.Builder videoEditorProjectBuilder = EditorProject.newBuilder();
     MediaAsset.Builder builder = MediaAsset.newBuilder();
-    builder.setAssetId(System.currentTimeMillis()).setAssetPath("/sdcard/test.mp4")
-        .setVolume(1.0);
+    builder.setAssetId(System.currentTimeMillis()).setAssetPath("/sdcard/test.mp4");
     videoEditorProjectBuilder.addMediaAsset(builder.build());
   
-    final StringBuilder stringBuilder = new StringBuilder();
     findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         stringBuilder.delete(0, stringBuilder.toString().length());
-        mVideoDecoderService.setProject(0, videoEditorProjectBuilder.build());
-        mVideoDecoderService.start();
+        times.set(1);
+        timestamp.set(0);
+  
+        mVideoDecodeService.setProject(0, videoEditorProjectBuilder.build());
+        mVideoDecodeService.start();
       }
     });
     
@@ -60,8 +64,10 @@ public class TestActivity extends Activity {
       @Override
       public void onClick(View v) {
         stringBuilder.delete(0, stringBuilder.toString().length());
+        times.set(1);
         timestamp.set(3000);
-        mVideoDecoderService.seek(3);
+  
+        mVideoDecodeService.seek(3);
       }
     });
     
@@ -69,23 +75,27 @@ public class TestActivity extends Activity {
       @Override
       public void onClick(View v) {
         stringBuilder.delete(0, stringBuilder.toString().length());
-        mVideoDecoderService.stop();
+        times.set(1);
+        timestamp.set(0);
+  
+        mVideoDecodeService.stop();
       }
     });
   
     new Thread(new Runnable() {
       @Override
       public void run() {
-        int size = 0;
         while (true) {
-          if (mVideoDecoderService.stopped() || mVideoDecoderService.ended()) {
+          if (mVideoDecodeService.stopped() || mVideoDecodeService.ended()) {
             continue;
           }
           long startTime = System.currentTimeMillis();
-          final String frameString = mVideoDecoderService.getRenderFrame(timestamp.get() * 1f / 1000);
+          final String frameString = mVideoDecodeService.getRenderFrame(timestamp.get() * 1f / 1000);
           final long costTime = System.currentTimeMillis() - startTime;
-          final String finalFrameString = frameString + ",costTime:" + costTime + ",timestamp:" + timestamp.get() + ",size:" + size + "\n\n";
-          size++;
+          final String finalFrameString = frameString + "，获取一帧花费的时间:" + costTime + "，预期当前帧的时间戳:" + timestamp.get() * 1f / 1000 + "s，当前帧是第几个有效帧:" + times.get() + "\n\n";
+          if (!finalFrameString.contains("当前帧属于哪个视频文件:，")) {
+            times.set(times.get() + 1);
+          }
           timestamp.set(timestamp.get() + 30);
           try {
             Thread.sleep(30);
@@ -110,7 +120,7 @@ public class TestActivity extends Activity {
           showState.post(new Runnable() {
             @Override
             public void run() {
-              showState.setText("ended:" + mVideoDecoderService.ended() + ",stopped:" + mVideoDecoderService.stopped() + ",frameCount:" + mVideoDecoderService.getBufferedFrameCount());
+              showState.setText("是否解码到了视频的结尾:" + mVideoDecodeService.ended() + "，是否暂停解码:" + mVideoDecodeService.stopped() + "，队列中的帧数量:" + mVideoDecodeService.getBufferedFrameCount());
             }
           });
           try {

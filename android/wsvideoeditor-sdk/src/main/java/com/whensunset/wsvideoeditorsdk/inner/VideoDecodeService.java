@@ -7,15 +7,15 @@ import com.whensunset.wsvideoeditorsdk.model.EditorProject;
 /**
  * wsvideoeditor::VideoDecodeService 的上层封装
  */
-public class VideoDecoderService {
+public class VideoDecodeService {
   private volatile long mNativeAddress = 0;
   
-  public VideoDecoderService() {
-    mNativeAddress = newNative(5);
+  public VideoDecodeService(int size) {
+    mNativeAddress = newNative(size);
   }
   
   /**
-   * 释放 VideoDecoderService native 对象
+   * 释放 VideoDecodeService native 对象
    */
   public void release() {
     releaseNative(mNativeAddress);

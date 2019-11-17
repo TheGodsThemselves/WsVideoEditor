@@ -12,7 +12,7 @@ extern "C" {
  * Method:    newNative
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_newNative
+JNIEXPORT jlong JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_newNative
         (JNIEnv *, jobject, jint);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT jlong JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderS
  * Method:    releaseNative
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_releaseNative
+JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_releaseNative
         (JNIEnv *, jobject, jlong);
 
 /*
@@ -29,7 +29,7 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderSe
  * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_setProjectNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_setProjectNative
         (JNIEnv *, jobject, jlong, jdouble, jbyteArray);
 
 /*
@@ -37,7 +37,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_setProjectNative
  * Method:    startNative
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_startNative
+JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_startNative
         (JNIEnv *, jobject, jlong);
 
 /*
@@ -46,7 +46,7 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderSe
  * Signature: (JD)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_getRenderFrameNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_getRenderFrameNative
         (JNIEnv *, jobject, jlong, jdouble);
 
 /*
@@ -55,7 +55,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_getRenderFrameNat
  * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_updateProjectNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_updateProjectNative
         (JNIEnv *, jobject, jlong, jbyteArray);
 
 /*
@@ -63,7 +63,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_updateProjectNati
  * Method:    seekNative
  * Signature: (JD)V
  */
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_seekNative
+JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_seekNative
         (JNIEnv *, jobject, jlong, jdouble);
 
 /*
@@ -71,7 +71,7 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderSe
  * Method:    stopNative
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_stopNative
+JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_stopNative
         (JNIEnv *, jobject, jlong);
 
 /*
@@ -80,7 +80,7 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderSe
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_endedNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_endedNative
         (JNIEnv *, jobject, jlong);
 
 /*
@@ -89,7 +89,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_endedNative
  * Signature: (J)Z
  */
 JNIEXPORT jboolean JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_stoppedNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_stoppedNative
         (JNIEnv *, jobject, jlong);
 
 /*
@@ -98,7 +98,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_stoppedNative
  * Signature: (J)I
  */
 JNIEXPORT jint JNICALL
-Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_getBufferedFrameCountNative
+Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecodeService_getBufferedFrameCountNative
         (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus

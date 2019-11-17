@@ -14,7 +14,7 @@
     android:id="@+id/seek"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="seek" />
+    android:text="seek to 3s" />
 
   <Button
     android:id="@+id/stop"
