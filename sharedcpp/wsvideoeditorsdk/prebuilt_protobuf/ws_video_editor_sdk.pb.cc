@@ -19,6 +19,7 @@ namespace wsvideoeditor {
 namespace model {
 
 void protobuf_ShutdownFile_ws_5fvideo_5feditor_5fsdk_2eproto() {
+  delete Rational::default_instance_;
   delete TimeRange::default_instance_;
   delete MediaStreamHolder::default_instance_;
   delete MediaFileHolder::default_instance_;
@@ -40,12 +41,14 @@ void protobuf_AddDesc_ws_5fvideo_5feditor_5fsdk_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
 #endif
+  Rational::default_instance_ = new Rational();
   TimeRange::default_instance_ = new TimeRange();
   MediaStreamHolder::default_instance_ = new MediaStreamHolder();
   MediaFileHolder::default_instance_ = new MediaFileHolder();
   MediaAsset::default_instance_ = new MediaAsset();
   EditorProjectPrivateData::default_instance_ = new EditorProjectPrivateData();
   EditorProject::default_instance_ = new EditorProject();
+  Rational::default_instance_->InitAsDefaultInstance();
   TimeRange::default_instance_->InitAsDefaultInstance();
   MediaStreamHolder::default_instance_->InitAsDefaultInstance();
   MediaFileHolder::default_instance_->InitAsDefaultInstance();
@@ -91,6 +94,279 @@ bool YuvAlphaType_IsValid(int value) {
   }
 }
 
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Rational::kNumFieldNumber;
+const int Rational::kDenFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Rational::Rational()
+  : ::google::protobuf::MessageLite(), _arena_ptr_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:whensunset.wsvideoeditor.model.Rational)
+}
+
+void Rational::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+}
+
+Rational::Rational(const Rational& from)
+  : ::google::protobuf::MessageLite(),
+    _arena_ptr_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:whensunset.wsvideoeditor.model.Rational)
+}
+
+void Rational::SharedCtor() {
+    _is_default_instance_ = false;
+  _cached_size_ = 0;
+  num_ = GOOGLE_LONGLONG(0);
+  den_ = GOOGLE_LONGLONG(0);
+}
+
+Rational::~Rational() {
+  // @@protoc_insertion_point(destructor:whensunset.wsvideoeditor.model.Rational)
+  SharedDtor();
+}
+
+void Rational::SharedDtor() {
+  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  if (this != &default_instance()) {
+  #else
+  if (this != default_instance_) {
+  #endif
+  }
+}
+
+void Rational::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const Rational& Rational::default_instance() {
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  protobuf_AddDesc_ws_5fvideo_5feditor_5fsdk_2eproto();
+#else
+  if (default_instance_ == NULL) protobuf_AddDesc_ws_5fvideo_5feditor_5fsdk_2eproto();
+#endif
+  return *default_instance_;
+}
+
+Rational* Rational::default_instance_ = NULL;
+
+Rational* Rational::New(::google::protobuf::Arena* arena) const {
+  Rational* n = new Rational;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Rational::Clear() {
+// @@protoc_insertion_point(message_clear_start:whensunset.wsvideoeditor.model.Rational)
+#if defined(__clang__)
+#define ZR_HELPER_(f) \
+  _Pragma("clang diagnostic push") \
+  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
+  __builtin_offsetof(Rational, f) \
+  _Pragma("clang diagnostic pop")
+#else
+#define ZR_HELPER_(f) reinterpret_cast<char*>(\
+  &reinterpret_cast<Rational*>(16)->f)
+#endif
+
+#define ZR_(first, last) do {\
+  ::memset(&first, 0,\
+           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
+} while (0)
+
+  ZR_(num_, den_);
+
+#undef ZR_HELPER_
+#undef ZR_
+
+}
+
+bool Rational::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:whensunset.wsvideoeditor.model.Rational)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional int64 num = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &num_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_den;
+        break;
+      }
+
+      // optional int64 den = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_den:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &den_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:whensunset.wsvideoeditor.model.Rational)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:whensunset.wsvideoeditor.model.Rational)
+  return false;
+#undef DO_
+}
+
+void Rational::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:whensunset.wsvideoeditor.model.Rational)
+  // optional int64 num = 1;
+  if (this->num() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->num(), output);
+  }
+
+  // optional int64 den = 2;
+  if (this->den() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->den(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:whensunset.wsvideoeditor.model.Rational)
+}
+
+int Rational::ByteSize() const {
+// @@protoc_insertion_point(message_byte_size_start:whensunset.wsvideoeditor.model.Rational)
+  int total_size = 0;
+
+  // optional int64 num = 1;
+  if (this->num() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->num());
+  }
+
+  // optional int64 den = 2;
+  if (this->den() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->den());
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Rational::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const Rational*>(&from));
+}
+
+void Rational::MergeFrom(const Rational& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:whensunset.wsvideoeditor.model.Rational)
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  if (from.num() != 0) {
+    set_num(from.num());
+  }
+  if (from.den() != 0) {
+    set_den(from.den());
+  }
+}
+
+void Rational::CopyFrom(const Rational& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:whensunset.wsvideoeditor.model.Rational)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Rational::IsInitialized() const {
+
+  return true;
+}
+
+void Rational::Swap(Rational* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Rational::InternalSwap(Rational* other) {
+  std::swap(num_, other->num_);
+  std::swap(den_, other->den_);
+  _unknown_fields_.Swap(&other->_unknown_fields_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string Rational::GetTypeName() const {
+  return "whensunset.wsvideoeditor.model.Rational";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// Rational
+
+// optional int64 num = 1;
+void Rational::clear_num() {
+  num_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Rational::num() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.Rational.num)
+  return num_;
+}
+ void Rational::set_num(::google::protobuf::int64 value) {
+  
+  num_ = value;
+  // @@protoc_insertion_point(field_set:whensunset.wsvideoeditor.model.Rational.num)
+}
+
+// optional int64 den = 2;
+void Rational::clear_den() {
+  den_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 Rational::den() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.Rational.den)
+  return den_;
+}
+ void Rational::set_den(::google::protobuf::int64 value) {
+  
+  den_ = value;
+  // @@protoc_insertion_point(field_set:whensunset.wsvideoeditor.model.Rational.den)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
@@ -414,7 +690,12 @@ void TimeRange::clear_id() {
 const int MediaStreamHolder::kWidthFieldNumber;
 const int MediaStreamHolder::kHeightFieldNumber;
 const int MediaStreamHolder::kCodecTypeFieldNumber;
+const int MediaStreamHolder::kAvgFrameRateFieldNumber;
+const int MediaStreamHolder::kTimeBaseFieldNumber;
+const int MediaStreamHolder::kDurationTsFieldNumber;
 const int MediaStreamHolder::kRotationFieldNumber;
+const int MediaStreamHolder::kSampleAspectRatioFieldNumber;
+const int MediaStreamHolder::kGuessedFrameRateFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MediaStreamHolder::MediaStreamHolder()
@@ -425,6 +706,30 @@ MediaStreamHolder::MediaStreamHolder()
 
 void MediaStreamHolder::InitAsDefaultInstance() {
   _is_default_instance_ = true;
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  avg_frame_rate_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(
+      ::whensunset::wsvideoeditor::model::Rational::internal_default_instance());
+#else
+  avg_frame_rate_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(&::whensunset::wsvideoeditor::model::Rational::default_instance());
+#endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  time_base_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(
+      ::whensunset::wsvideoeditor::model::Rational::internal_default_instance());
+#else
+  time_base_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(&::whensunset::wsvideoeditor::model::Rational::default_instance());
+#endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  sample_aspect_ratio_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(
+      ::whensunset::wsvideoeditor::model::Rational::internal_default_instance());
+#else
+  sample_aspect_ratio_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(&::whensunset::wsvideoeditor::model::Rational::default_instance());
+#endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  guessed_frame_rate_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(
+      ::whensunset::wsvideoeditor::model::Rational::internal_default_instance());
+#else
+  guessed_frame_rate_ = const_cast< ::whensunset::wsvideoeditor::model::Rational*>(&::whensunset::wsvideoeditor::model::Rational::default_instance());
+#endif
 }
 
 MediaStreamHolder::MediaStreamHolder(const MediaStreamHolder& from)
@@ -442,7 +747,12 @@ void MediaStreamHolder::SharedCtor() {
   width_ = 0;
   height_ = 0;
   codec_type_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  avg_frame_rate_ = NULL;
+  time_base_ = NULL;
+  duration_ts_ = GOOGLE_LONGLONG(0);
   rotation_ = 0;
+  sample_aspect_ratio_ = NULL;
+  guessed_frame_rate_ = NULL;
 }
 
 MediaStreamHolder::~MediaStreamHolder() {
@@ -457,6 +767,10 @@ void MediaStreamHolder::SharedDtor() {
   #else
   if (this != default_instance_) {
   #endif
+    delete avg_frame_rate_;
+    delete time_base_;
+    delete sample_aspect_ratio_;
+    delete guessed_frame_rate_;
   }
 }
 
@@ -504,7 +818,16 @@ void MediaStreamHolder::Clear() {
 
   ZR_(width_, height_);
   codec_type_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (GetArenaNoVirtual() == NULL && avg_frame_rate_ != NULL) delete avg_frame_rate_;
+  avg_frame_rate_ = NULL;
+  if (GetArenaNoVirtual() == NULL && time_base_ != NULL) delete time_base_;
+  time_base_ = NULL;
+  duration_ts_ = GOOGLE_LONGLONG(0);
   rotation_ = 0;
+  if (GetArenaNoVirtual() == NULL && sample_aspect_ratio_ != NULL) delete sample_aspect_ratio_;
+  sample_aspect_ratio_ = NULL;
+  if (GetArenaNoVirtual() == NULL && guessed_frame_rate_ != NULL) delete guessed_frame_rate_;
+  guessed_frame_rate_ = NULL;
 
 #undef ZR_HELPER_
 #undef ZR_
@@ -563,18 +886,85 @@ bool MediaStreamHolder::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_rotation;
+        if (input->ExpectTag(34)) goto parse_avg_frame_rate;
         break;
       }
 
-      // optional int32 rotation = 4;
+      // optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;
       case 4: {
-        if (tag == 32) {
+        if (tag == 34) {
+         parse_avg_frame_rate:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_avg_frame_rate()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_time_base;
+        break;
+      }
+
+      // optional .whensunset.wsvideoeditor.model.Rational time_base = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_time_base:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_time_base()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_duration_ts;
+        break;
+      }
+
+      // optional int64 duration_ts = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_duration_ts:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &duration_ts_)));
+
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_rotation;
+        break;
+      }
+
+      // optional int32 rotation = 7;
+      case 7: {
+        if (tag == 56) {
          parse_rotation:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &rotation_)));
 
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(66)) goto parse_sample_aspect_ratio;
+        break;
+      }
+
+      // optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;
+      case 8: {
+        if (tag == 66) {
+         parse_sample_aspect_ratio:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_sample_aspect_ratio()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(74)) goto parse_guessed_frame_rate;
+        break;
+      }
+
+      // optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;
+      case 9: {
+        if (tag == 74) {
+         parse_guessed_frame_rate:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_guessed_frame_rate()));
         } else {
           goto handle_unusual;
         }
@@ -626,9 +1016,38 @@ void MediaStreamHolder::SerializeWithCachedSizes(
       3, this->codec_type(), output);
   }
 
-  // optional int32 rotation = 4;
+  // optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;
+  if (this->has_avg_frame_rate()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      4, *this->avg_frame_rate_, output);
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational time_base = 5;
+  if (this->has_time_base()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      5, *this->time_base_, output);
+  }
+
+  // optional int64 duration_ts = 6;
+  if (this->duration_ts() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(6, this->duration_ts(), output);
+  }
+
+  // optional int32 rotation = 7;
   if (this->rotation() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->rotation(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->rotation(), output);
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;
+  if (this->has_sample_aspect_ratio()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      8, *this->sample_aspect_ratio_, output);
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;
+  if (this->has_guessed_frame_rate()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      9, *this->guessed_frame_rate_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:whensunset.wsvideoeditor.model.MediaStreamHolder)
@@ -659,11 +1078,46 @@ int MediaStreamHolder::ByteSize() const {
         this->codec_type());
   }
 
-  // optional int32 rotation = 4;
+  // optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;
+  if (this->has_avg_frame_rate()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->avg_frame_rate_);
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational time_base = 5;
+  if (this->has_time_base()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->time_base_);
+  }
+
+  // optional int64 duration_ts = 6;
+  if (this->duration_ts() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->duration_ts());
+  }
+
+  // optional int32 rotation = 7;
   if (this->rotation() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->rotation());
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;
+  if (this->has_sample_aspect_ratio()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->sample_aspect_ratio_);
+  }
+
+  // optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;
+  if (this->has_guessed_frame_rate()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->guessed_frame_rate_);
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -692,8 +1146,23 @@ void MediaStreamHolder::MergeFrom(const MediaStreamHolder& from) {
 
     codec_type_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.codec_type_);
   }
+  if (from.has_avg_frame_rate()) {
+    mutable_avg_frame_rate()->::whensunset::wsvideoeditor::model::Rational::MergeFrom(from.avg_frame_rate());
+  }
+  if (from.has_time_base()) {
+    mutable_time_base()->::whensunset::wsvideoeditor::model::Rational::MergeFrom(from.time_base());
+  }
+  if (from.duration_ts() != 0) {
+    set_duration_ts(from.duration_ts());
+  }
   if (from.rotation() != 0) {
     set_rotation(from.rotation());
+  }
+  if (from.has_sample_aspect_ratio()) {
+    mutable_sample_aspect_ratio()->::whensunset::wsvideoeditor::model::Rational::MergeFrom(from.sample_aspect_ratio());
+  }
+  if (from.has_guessed_frame_rate()) {
+    mutable_guessed_frame_rate()->::whensunset::wsvideoeditor::model::Rational::MergeFrom(from.guessed_frame_rate());
   }
 }
 
@@ -717,7 +1186,12 @@ void MediaStreamHolder::InternalSwap(MediaStreamHolder* other) {
   std::swap(width_, other->width_);
   std::swap(height_, other->height_);
   codec_type_.Swap(&other->codec_type_);
+  std::swap(avg_frame_rate_, other->avg_frame_rate_);
+  std::swap(time_base_, other->time_base_);
+  std::swap(duration_ts_, other->duration_ts_);
   std::swap(rotation_, other->rotation_);
+  std::swap(sample_aspect_ratio_, other->sample_aspect_ratio_);
+  std::swap(guessed_frame_rate_, other->guessed_frame_rate_);
   _unknown_fields_.Swap(&other->_unknown_fields_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -801,7 +1275,105 @@ void MediaStreamHolder::clear_codec_type() {
   // @@protoc_insertion_point(field_set_allocated:whensunset.wsvideoeditor.model.MediaStreamHolder.codec_type)
 }
 
-// optional int32 rotation = 4;
+// optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;
+bool MediaStreamHolder::has_avg_frame_rate() const {
+  return !_is_default_instance_ && avg_frame_rate_ != NULL;
+}
+void MediaStreamHolder::clear_avg_frame_rate() {
+  if (GetArenaNoVirtual() == NULL && avg_frame_rate_ != NULL) delete avg_frame_rate_;
+  avg_frame_rate_ = NULL;
+}
+const ::whensunset::wsvideoeditor::model::Rational& MediaStreamHolder::avg_frame_rate() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.MediaStreamHolder.avg_frame_rate)
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  return avg_frame_rate_ != NULL ? *avg_frame_rate_ : *default_instance().avg_frame_rate_;
+#else
+  return avg_frame_rate_ != NULL ? *avg_frame_rate_ : *default_instance_->avg_frame_rate_;
+#endif
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::mutable_avg_frame_rate() {
+  
+  if (avg_frame_rate_ == NULL) {
+    avg_frame_rate_ = new ::whensunset::wsvideoeditor::model::Rational;
+  }
+  // @@protoc_insertion_point(field_mutable:whensunset.wsvideoeditor.model.MediaStreamHolder.avg_frame_rate)
+  return avg_frame_rate_;
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::release_avg_frame_rate() {
+  // @@protoc_insertion_point(field_release:whensunset.wsvideoeditor.model.MediaStreamHolder.avg_frame_rate)
+  
+  ::whensunset::wsvideoeditor::model::Rational* temp = avg_frame_rate_;
+  avg_frame_rate_ = NULL;
+  return temp;
+}
+void MediaStreamHolder::set_allocated_avg_frame_rate(::whensunset::wsvideoeditor::model::Rational* avg_frame_rate) {
+  delete avg_frame_rate_;
+  avg_frame_rate_ = avg_frame_rate;
+  if (avg_frame_rate) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:whensunset.wsvideoeditor.model.MediaStreamHolder.avg_frame_rate)
+}
+
+// optional .whensunset.wsvideoeditor.model.Rational time_base = 5;
+bool MediaStreamHolder::has_time_base() const {
+  return !_is_default_instance_ && time_base_ != NULL;
+}
+void MediaStreamHolder::clear_time_base() {
+  if (GetArenaNoVirtual() == NULL && time_base_ != NULL) delete time_base_;
+  time_base_ = NULL;
+}
+const ::whensunset::wsvideoeditor::model::Rational& MediaStreamHolder::time_base() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.MediaStreamHolder.time_base)
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  return time_base_ != NULL ? *time_base_ : *default_instance().time_base_;
+#else
+  return time_base_ != NULL ? *time_base_ : *default_instance_->time_base_;
+#endif
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::mutable_time_base() {
+  
+  if (time_base_ == NULL) {
+    time_base_ = new ::whensunset::wsvideoeditor::model::Rational;
+  }
+  // @@protoc_insertion_point(field_mutable:whensunset.wsvideoeditor.model.MediaStreamHolder.time_base)
+  return time_base_;
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::release_time_base() {
+  // @@protoc_insertion_point(field_release:whensunset.wsvideoeditor.model.MediaStreamHolder.time_base)
+  
+  ::whensunset::wsvideoeditor::model::Rational* temp = time_base_;
+  time_base_ = NULL;
+  return temp;
+}
+void MediaStreamHolder::set_allocated_time_base(::whensunset::wsvideoeditor::model::Rational* time_base) {
+  delete time_base_;
+  time_base_ = time_base;
+  if (time_base) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:whensunset.wsvideoeditor.model.MediaStreamHolder.time_base)
+}
+
+// optional int64 duration_ts = 6;
+void MediaStreamHolder::clear_duration_ts() {
+  duration_ts_ = GOOGLE_LONGLONG(0);
+}
+ ::google::protobuf::int64 MediaStreamHolder::duration_ts() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.MediaStreamHolder.duration_ts)
+  return duration_ts_;
+}
+ void MediaStreamHolder::set_duration_ts(::google::protobuf::int64 value) {
+  
+  duration_ts_ = value;
+  // @@protoc_insertion_point(field_set:whensunset.wsvideoeditor.model.MediaStreamHolder.duration_ts)
+}
+
+// optional int32 rotation = 7;
 void MediaStreamHolder::clear_rotation() {
   rotation_ = 0;
 }
@@ -813,6 +1385,90 @@ void MediaStreamHolder::clear_rotation() {
   
   rotation_ = value;
   // @@protoc_insertion_point(field_set:whensunset.wsvideoeditor.model.MediaStreamHolder.rotation)
+}
+
+// optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;
+bool MediaStreamHolder::has_sample_aspect_ratio() const {
+  return !_is_default_instance_ && sample_aspect_ratio_ != NULL;
+}
+void MediaStreamHolder::clear_sample_aspect_ratio() {
+  if (GetArenaNoVirtual() == NULL && sample_aspect_ratio_ != NULL) delete sample_aspect_ratio_;
+  sample_aspect_ratio_ = NULL;
+}
+const ::whensunset::wsvideoeditor::model::Rational& MediaStreamHolder::sample_aspect_ratio() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.MediaStreamHolder.sample_aspect_ratio)
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  return sample_aspect_ratio_ != NULL ? *sample_aspect_ratio_ : *default_instance().sample_aspect_ratio_;
+#else
+  return sample_aspect_ratio_ != NULL ? *sample_aspect_ratio_ : *default_instance_->sample_aspect_ratio_;
+#endif
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::mutable_sample_aspect_ratio() {
+  
+  if (sample_aspect_ratio_ == NULL) {
+    sample_aspect_ratio_ = new ::whensunset::wsvideoeditor::model::Rational;
+  }
+  // @@protoc_insertion_point(field_mutable:whensunset.wsvideoeditor.model.MediaStreamHolder.sample_aspect_ratio)
+  return sample_aspect_ratio_;
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::release_sample_aspect_ratio() {
+  // @@protoc_insertion_point(field_release:whensunset.wsvideoeditor.model.MediaStreamHolder.sample_aspect_ratio)
+  
+  ::whensunset::wsvideoeditor::model::Rational* temp = sample_aspect_ratio_;
+  sample_aspect_ratio_ = NULL;
+  return temp;
+}
+void MediaStreamHolder::set_allocated_sample_aspect_ratio(::whensunset::wsvideoeditor::model::Rational* sample_aspect_ratio) {
+  delete sample_aspect_ratio_;
+  sample_aspect_ratio_ = sample_aspect_ratio;
+  if (sample_aspect_ratio) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:whensunset.wsvideoeditor.model.MediaStreamHolder.sample_aspect_ratio)
+}
+
+// optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;
+bool MediaStreamHolder::has_guessed_frame_rate() const {
+  return !_is_default_instance_ && guessed_frame_rate_ != NULL;
+}
+void MediaStreamHolder::clear_guessed_frame_rate() {
+  if (GetArenaNoVirtual() == NULL && guessed_frame_rate_ != NULL) delete guessed_frame_rate_;
+  guessed_frame_rate_ = NULL;
+}
+const ::whensunset::wsvideoeditor::model::Rational& MediaStreamHolder::guessed_frame_rate() const {
+  // @@protoc_insertion_point(field_get:whensunset.wsvideoeditor.model.MediaStreamHolder.guessed_frame_rate)
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  return guessed_frame_rate_ != NULL ? *guessed_frame_rate_ : *default_instance().guessed_frame_rate_;
+#else
+  return guessed_frame_rate_ != NULL ? *guessed_frame_rate_ : *default_instance_->guessed_frame_rate_;
+#endif
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::mutable_guessed_frame_rate() {
+  
+  if (guessed_frame_rate_ == NULL) {
+    guessed_frame_rate_ = new ::whensunset::wsvideoeditor::model::Rational;
+  }
+  // @@protoc_insertion_point(field_mutable:whensunset.wsvideoeditor.model.MediaStreamHolder.guessed_frame_rate)
+  return guessed_frame_rate_;
+}
+::whensunset::wsvideoeditor::model::Rational* MediaStreamHolder::release_guessed_frame_rate() {
+  // @@protoc_insertion_point(field_release:whensunset.wsvideoeditor.model.MediaStreamHolder.guessed_frame_rate)
+  
+  ::whensunset::wsvideoeditor::model::Rational* temp = guessed_frame_rate_;
+  guessed_frame_rate_ = NULL;
+  return temp;
+}
+void MediaStreamHolder::set_allocated_guessed_frame_rate(::whensunset::wsvideoeditor::model::Rational* guessed_frame_rate) {
+  delete guessed_frame_rate_;
+  guessed_frame_rate_ = guessed_frame_rate;
+  if (guessed_frame_rate) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:whensunset.wsvideoeditor.model.MediaStreamHolder.guessed_frame_rate)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

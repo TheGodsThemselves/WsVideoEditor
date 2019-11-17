@@ -28,10 +28,15 @@
     android:layout_height="wrap_content"
     android:text="state" />
 
-  <TextView
-    android:id="@+id/show_frame"
+  <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="frame" />
+    android:layout_height="match_parent">
+
+    <TextView
+      android:id="@+id/show_frame"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="frame" />
+  </ScrollView>
 
 </LinearLayout>

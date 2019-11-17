@@ -1,5 +1,6 @@
 #include "com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService.h"
 #include "video_decode_service.h"
+#include "ws_editor_video_sdk_utils.h"
 
 using namespace whensunset::wsvideoeditor;
 using namespace model;
@@ -23,6 +24,7 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_setProjectNative
     jbyte *buffer_elements = env->GetByteArrayElements(buffer, 0);
     project.ParseFromArray(buffer_elements, env->GetArrayLength(buffer));
     env->ReleaseByteArrayElements(buffer, buffer_elements, 0);
+    LoadProject(&project);
     native_decode_service->SetProject(project, render_pos);
 }
 
@@ -38,7 +40,8 @@ Java_com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService_getRenderFrameNat
     VideoDecodeService *native_decode_service = reinterpret_cast<VideoDecodeService *>(address);
     DecodedFramesUnit decodedFramesUnit = native_decode_service->GetRenderFrameAtPtsOrNull(
             render_pos);
-    return env->NewStringUTF(decodedFramesUnit.ToString().c_str());
+    std::string toString = decodedFramesUnit.ToString();
+    return env->NewStringUTF(toString.c_str());
 }
 
 JNIEXPORT void JNICALL

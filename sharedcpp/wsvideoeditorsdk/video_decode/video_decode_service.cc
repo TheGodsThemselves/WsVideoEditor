@@ -126,7 +126,7 @@ namespace whensunset {
                          changed_render_pos, BoTSt(project_changed).c_str(),
                          BoTSt(stopped_).c_str());
                 }
-                if (changed_render_pos) {
+                if (changed_render_pos != -1) {
                     {
                         std::lock_guard<std::mutex> lk(member_param_mutex_);
                         if (stopped_) {
@@ -199,7 +199,7 @@ namespace whensunset {
                      got_frame, end_offset, frame_timestamp_sec_in_track, ret);
                 {
                     std::lock_guard<std::mutex> lk(member_param_mutex_);
-                    if (changed_render_pos_) {
+                    if (changed_render_pos_ != -1) {
                         LOGI("VideoDecodeService::DecodeThreadMain render pos changed");
                         continue;
                     }
@@ -279,7 +279,7 @@ namespace whensunset {
         void VideoDecodeService::DecodeEofHandle() {
             std::unique_lock<std::mutex> lk(member_param_mutex_);
             bool has_position_change_request = false;
-            if (changed_render_pos_) {
+            if (changed_render_pos_ != -1) {
                 has_position_change_request = true;
             }
             ended_ = true;
@@ -296,7 +296,7 @@ namespace whensunset {
             lk.lock();
             decode_thread_waiting_cv_.wait(lk, [this] {
                 LOGI("VideoDecodeService::DecodeEofHandle stopped_:%s", BoTSt(stopped_).c_str());
-                return changed_render_pos_ || stopped_;
+                return (changed_render_pos_ != -1) || stopped_;
             });
             LOGI("VideoDecodeService::DecodeEofHandle has_position_change_request:%s",
                  BoTSt(has_position_change_request).c_str());
@@ -408,6 +408,7 @@ namespace whensunset {
                 bool should_use_first_frame = false;
                 auto result = decoded_unit_queue_.PopFrontIf(
                         [&](const std::vector<DecodedFramesUnit> &units) {
+                            int64_t render_pos = (int64_t) (render_sec * AV_TIME_BASE + 0.5);
                             if (units.size() <= 1) {
                                 return false;
                             }
@@ -417,17 +418,16 @@ namespace whensunset {
                             should_discard_first_frame = (second_pts <= render_pos);
                             should_use_first_frame = (first_pts <= render_pos &&
                                                       render_pos < second_pts);
-                            LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal first_pts:%d, second_pts:%d, render_pos:%f, should_discard_first_frame:%s, should_use_first_frame:%s",
-                                 first_pts, second_pts, should_discard_first_frame,
-                                 should_use_first_frame, BoTSt(should_discard_first_frame).c_str(),
-                                 BoTSt(should_use_first_frame).c_str(), render_pos);
+                            LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal first_pts:%d, second_pts:%d, render_pos:%d",
+                                 first_pts, second_pts, render_pos);
                             return should_discard_first_frame || should_use_first_frame;
                         });
                 if (should_discard_first_frame) {
                     LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos bigger than second frame pos so first frame should discard");
                 } else if (should_use_first_frame) {
                     ret = std::move(result.second);
-                    LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos between first frame and second frame pos so use first frame");
+                    LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos between first frame and second frame pos so use first frame ret:%s",
+                         ret.ToString().c_str());
                 } else {
                     LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos smaller than first frame pos so return null");
                     return ret;

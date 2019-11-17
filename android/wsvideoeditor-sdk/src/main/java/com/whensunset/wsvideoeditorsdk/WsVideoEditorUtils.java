@@ -35,5 +35,6 @@ public class WsVideoEditorUtils {
         break;
     }
   }
+  
   public static native void initJniNative();
 }

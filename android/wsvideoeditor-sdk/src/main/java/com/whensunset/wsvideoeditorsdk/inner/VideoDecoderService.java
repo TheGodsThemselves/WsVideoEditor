@@ -41,7 +41,7 @@ public class VideoDecoderService {
   /**
    * 获取某个时间点的视频帧
    *
-   * @param renderTime 需要截取帧的时间点
+   * @param renderTime 需要截取帧的时间点 单位秒
    * @return
    */
   public String getRenderFrame(double renderTime) {

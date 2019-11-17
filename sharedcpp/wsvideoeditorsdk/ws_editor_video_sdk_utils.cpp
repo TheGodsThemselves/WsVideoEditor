@@ -36,6 +36,183 @@ namespace whensunset {
             av_log_set_level(AV_LOG_DEBUG);
         }
 
+        int LoadProject(model::EditorProject *project) {
+            int ret = 0;
+            model::EditorProjectPrivateData *private_data = project->mutable_private_data();
+            private_data->set_input_media_assets_number(project->media_asset_size());
+
+            for (int i = 0; i < private_data->input_media_assets_number(); ++i) {
+                model::MediaAsset *asset = project->mutable_media_asset(i);
+
+                if ((ret = OpenMediaFile(asset->asset_path().c_str(),
+                                         asset->mutable_media_asset_file_holder())) < 0) {
+                    return ret;
+                }
+            }
+            CalculateDurationAndDimension(project);
+            return 0;
+        }
+
+        // 根据初始化的 video asset 数据来计算视频的宽、高、fps、duration 之类的数据，然后存起来
+        void CalculateDurationAndDimension(model::EditorProject *project) {
+            int width = 0;
+            int height = 0;
+            double fps = 0.0;
+            GetProjectDimensionAndFps(project, &width, &height, &fps);
+            model::EditorProjectPrivateData *private_data = project->mutable_private_data();
+            private_data->set_project_duration(CalcProjectDuration(*project));
+
+            // commented out project_duration, project_width, project_height, project_fps for now
+            // project->set_project_duration(private_data->computed_duration());
+            private_data->set_project_fps(fps);
+            private_data->set_project_width(width);
+            private_data->set_project_height(height);
+        }
+
+        void GetProjectDimensionAndFps(model::EditorProject *project, int *width, int *height,
+                                       double *fps) {
+            GetProjectDimensionUnAlignAndUnLimit(project, width, height, fps);
+
+            // limit max project size 720p or 1080p(single image)!!!
+            LimitWidthAndHeight(*width, *height, ProjectMaxOutputShortEdge(*project),
+                                ProjectMaxOutputLongEdge(*project),
+                                PROJECT_WIDTH_ALIGNMENT, PROJECT_HEIGHT_ALIGNMENT, width, height);
+        }
+
+        void LimitWidthAndHeight(int original_width, int original_height, int max_short_edge,
+                                 int max_long_edge,
+                                 int width_alignment, int height_alignment, int *width_out,
+                                 int *height_out) {
+            int short_edge = min(original_width, original_height);
+            int long_edge = max(original_width, original_height);
+
+            if (short_edge > max_short_edge || long_edge > max_long_edge) {
+                double ratio = min(max_short_edge / (double) short_edge,
+                                   max_long_edge / (double) long_edge);
+                *width_out = static_cast<int>(original_width * ratio);
+                // height use ceil() to forbid black margin in up and down borders of player
+                *height_out = static_cast<int>(ceil(original_height * ratio));
+            } else {
+                *width_out = original_width;
+                *height_out = original_height;
+            }
+
+            if (width_alignment % 2 != 0 || height_alignment % 2 != 0 || width_alignment <= 0 ||
+                height_alignment <= 0) {
+                return;
+            }
+
+            if (width_alignment > 2 && (*width_out) % width_alignment != 0) {
+                int increment = width_alignment - (*width_out) % width_alignment;
+                (*width_out) += increment;
+                // we should keep origin ratio, instead of the size with ratio multiplied
+                (*height_out) =
+                        (original_height * (*width_out) + original_width - 1) / original_width;
+            }
+
+            *width_out += (*width_out) % 2;
+            *height_out += (*height_out) % 2;
+        }
+
+
+        void GetProjectDimensionUnAlignAndUnLimit(model::EditorProject *project, int *width,
+                                                  int *height, double *fps) {
+            double max_ratio = 0.0;
+            double fps_temp = -1.0;
+            int max_width = 0;
+            int width_temp, height_temp;
+            bool find_first_video_stream = false;
+            for (int i = 0; i < project->media_asset_size(); ++i) {
+                model::MediaAsset *asset = project->mutable_media_asset(i);
+                if (CachedMediaFileHolder(asset)->streams_size() == 0) {
+                    continue;
+                }
+                for (model::MediaStreamHolder stream : CachedMediaFileHolder(asset)->streams()) {
+                    if (stream.codec_type() == "video") {
+                        width_temp = stream.width();
+                        height_temp = stream.height();
+
+                        if (asset->alpha_info() == model::YUV_ALPHA_TYPE_LEFT_RIGHT) {
+                            width_temp /= 2;
+                            width_temp += (width_temp % 2);
+                        } else if (asset->alpha_info() == model::YUV_ALPHA_TYPE_TOP_BOTTOM) {
+                            height_temp /= 2;
+                            height_temp += (height_temp % 2);
+                        }
+
+                        if (stream.sample_aspect_ratio().den() != 0 &&
+                            stream.sample_aspect_ratio().num() != 0) {
+                            if (stream.sample_aspect_ratio().den() >
+                                stream.sample_aspect_ratio().num()) {
+                                width_temp = (int) (width_temp *
+                                                    stream.sample_aspect_ratio().num() /
+                                                    stream.sample_aspect_ratio().den());
+                                width_temp += width_temp % 2;
+                            } else {
+                                height_temp = (int) (height_temp *
+                                                     stream.sample_aspect_ratio().den() /
+                                                     stream.sample_aspect_ratio().num());
+                                height_temp += height_temp % 2;
+                            }
+                        }
+                        int rotation = GetTrackAssetRotation(*asset);
+                        if (rotation == 90 || rotation == 270) {
+                            swap(width_temp, height_temp);
+                        }
+                        //compare all videos, take the maximum fps
+                        double asset_fps = RationalToDouble(stream.guessed_frame_rate());
+                        fps_temp = max(fps_temp, asset_fps);
+                        max_width = max(max_width, width_temp);
+                        if ((width_temp > 0 && height_temp * 1.0 / width_temp > max_ratio) &&
+                            !find_first_video_stream) {
+                            *width = width_temp;
+                            *height = height_temp;
+                            max_ratio = height_temp * 1.0 / width_temp;
+                        }
+                        find_first_video_stream = true;
+                        break;
+                    }
+                }
+            }
+            if (fps_temp < TIME_EPS) {
+                *fps = 30.0;
+            } else {
+                *fps = min(fps_temp, 30.0);
+            }
+        }
+
+        int GetTrackAssetRotation(const model::MediaAsset &asset) {
+            if (asset.has_media_asset_file_holder()) {
+                model::MediaFileHolder holder_file = asset.media_asset_file_holder();
+                for (int i = 0; i < holder_file.streams_size(); i++) {
+                    model::MediaStreamHolder holder_stream = holder_file.streams(i);
+                    if (holder_stream.codec_type() == "video") {
+                        int nature_rotation = holder_stream.rotation();
+                        int user_rotation = 0;
+                        return ((nature_rotation + user_rotation) % 360 + 360) %
+                               360;  // normalize to [0, 360)
+                    }
+                }
+            }
+            return 0;
+        }
+
+        double RationalToDouble(const model::Rational &rational) {
+            return rational.den() > 0 ? rational.num() / (double) rational.den() : 0.0;
+        }
+
+        double CalcProjectDuration(const model::EditorProject &project) {
+            double total_duration = 0.0;
+            for (const model::MediaAsset &asset : project.media_asset()) {
+                if (asset.media_asset_file_holder().streams_size() == 0) {
+                    continue;
+                }
+                total_duration += asset.media_asset_file_holder().duration();
+            }
+
+            return total_duration;
+        }
+
         int OpenMediaFile(const char *path, model::MediaFileHolder *media_file_holder) {
             if (!media_file_holder) {
                 assert(0);
@@ -90,10 +267,10 @@ namespace whensunset {
             media_file_holder->clear_streams();
             for (int i = 0; i < fmtCtx->nb_streams; ++i) {
                 AVStream *stream = fmtCtx->streams[i];
-                model::MediaStreamHolder *probedStream = media_file_holder->add_streams();
+                model::MediaStreamHolder *holderStream = media_file_holder->add_streams();
 
-                probedStream->set_width(stream->codec->width);
-                probedStream->set_height(stream->codec->height);
+                holderStream->set_width(stream->codec->width);
+                holderStream->set_height(stream->codec->height);
 
                 // audio and video lengths may be not identical, so, for video, set duration to video stream length
                 double stream_duration = (stream->duration == AV_NOPTS_VALUE ? 0.0 : (
@@ -108,30 +285,30 @@ namespace whensunset {
 
                 switch (stream->codec->codec_type) {
                     case AVMEDIA_TYPE_VIDEO: {
-                        probedStream->set_codec_type("video");
+                        holderStream->set_codec_type("video");
                         AVDictionaryEntry *entry = av_dict_get(stream->metadata, "rotate", NULL, 0);
                         if (entry != NULL && entry->value != NULL && entry->value[0] != '\0') {
-                            probedStream->set_rotation(atoi(entry->value));
+                            holderStream->set_rotation(atoi(entry->value));
                         }
                         break;
                     }
                     case AVMEDIA_TYPE_AUDIO:
-                        probedStream->set_codec_type("audio");
+                        holderStream->set_codec_type("audio");
                         break;
                     case AVMEDIA_TYPE_DATA:
-                        probedStream->set_codec_type("data");
+                        holderStream->set_codec_type("data");
                         break;
                     case AVMEDIA_TYPE_SUBTITLE:
-                        probedStream->set_codec_type("subtitle");
+                        holderStream->set_codec_type("subtitle");
                         break;
                     case AVMEDIA_TYPE_ATTACHMENT:
-                        probedStream->set_codec_type("attachment");
+                        holderStream->set_codec_type("attachment");
                         break;
                     case AVMEDIA_TYPE_NB:
-                        probedStream->set_codec_type("nb");
+                        holderStream->set_codec_type("nb");
                         break;
                     default:
-                        probedStream->set_codec_type("unknown");
+                        holderStream->set_codec_type("unknown");
                 }
             }
             if (fmtCtx->nb_streams <= 0) {
@@ -175,7 +352,8 @@ namespace whensunset {
             if (!asset->has_media_asset_file_holder() ||
                 asset->media_asset_file_holder().path() == ""
                 || (asset->media_asset_file_holder().path() != asset->asset_path())) {
-                OpenMediaFile(asset->asset_path().c_str(), asset->mutable_media_asset_file_holder());
+                OpenMediaFile(asset->asset_path().c_str(),
+                              asset->mutable_media_asset_file_holder());
             }
             return asset->mutable_media_asset_file_holder();
         }
@@ -189,5 +367,12 @@ namespace whensunset {
             return ext;
         }
 
+        int ProjectMaxOutputShortEdge(const model::EditorProject &project) {
+            return kShortEdge720p;
+        }
+
+        int ProjectMaxOutputLongEdge(const model::EditorProject &project) {
+            return kLongEdge720p;
+        }
     }
 }

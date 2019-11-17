@@ -40,11 +40,52 @@ public interface MediaStreamHolderOrBuilder extends
       getCodecTypeBytes();
 
   /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
+   */
+  boolean hasAvgFrameRate();
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
+   */
+  com.whensunset.wsvideoeditorsdk.model.Rational getAvgFrameRate();
+
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
+   */
+  boolean hasTimeBase();
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
+   */
+  com.whensunset.wsvideoeditorsdk.model.Rational getTimeBase();
+
+  /**
+   * <code>optional int64 duration_ts = 6;</code>
+   */
+  long getDurationTs();
+
+  /**
    * <pre>
    * 视频的旋转角度
    * </pre>
    *
-   * <code>optional int32 rotation = 4;</code>
+   * <code>optional int32 rotation = 7;</code>
    */
   int getRotation();
+
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
+   */
+  boolean hasSampleAspectRatio();
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
+   */
+  com.whensunset.wsvideoeditorsdk.model.Rational getSampleAspectRatio();
+
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
+   */
+  boolean hasGuessedFrameRate();
+  /**
+   * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
+   */
+  com.whensunset.wsvideoeditorsdk.model.Rational getGuessedFrameRate();
 }

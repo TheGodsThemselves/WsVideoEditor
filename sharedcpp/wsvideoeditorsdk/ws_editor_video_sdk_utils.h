@@ -12,6 +12,28 @@ namespace whensunset {
     namespace wsvideoeditor {
         void InitSDK();
 
+        int LoadProject(model::EditorProject *project);
+
+        void CalculateDurationAndDimension(model::EditorProject *project);
+
+        double CalcProjectDuration(const model::EditorProject &project);
+
+        void
+        GetProjectDimensionUnAlignAndUnLimit(model::EditorProject *project, int *width, int *height,
+                                             double *fps);
+
+        void LimitWidthAndHeight(int original_width, int original_height, int max_short_edge,
+                                 int max_long_edge,
+                                 int width_alignment, int height_alignment, int *width_out,
+                                 int *height_out);
+
+        void GetProjectDimensionAndFps(model::EditorProject *project, int *width, int *height,
+                                       double *fps);
+
+        int GetTrackAssetRotation(const model::MediaAsset &asset);
+
+        double RationalToDouble(const model::Rational &rational);
+
         int OpenMediaFile(const char *path, model::MediaFileHolder *media_file_holder);
 
         double
@@ -29,6 +51,10 @@ namespace whensunset {
                                                 int asset_index);
 
         model::MediaFileHolder *CachedMediaFileHolder(model::MediaAsset *asset);
+
+        int ProjectMaxOutputShortEdge(const model::EditorProject &project);
+
+        int ProjectMaxOutputLongEdge(const model::EditorProject &project);
 
     }
 }

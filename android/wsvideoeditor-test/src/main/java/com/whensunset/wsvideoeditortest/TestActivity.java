@@ -39,16 +39,19 @@ public class TestActivity extends Activity {
     showState = findViewById(R.id.show_state);
     showFrame = findViewById(R.id.show_frame);
     mVideoDecoderService = new VideoDecoderService();
-    EditorProject.Builder videoEditorProjectBuilder = EditorProject.newBuilder();
+  
+    final EditorProject.Builder videoEditorProjectBuilder = EditorProject.newBuilder();
     MediaAsset.Builder builder = MediaAsset.newBuilder();
     builder.setAssetId(System.currentTimeMillis()).setAssetPath("/sdcard/test.mp4")
         .setVolume(1.0);
     videoEditorProjectBuilder.addMediaAsset(builder.build());
-    mVideoDecoderService.setProject(0.1, videoEditorProjectBuilder.build());
-    
+  
+    final StringBuilder stringBuilder = new StringBuilder();
     findViewById(R.id.start).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        stringBuilder.delete(0, stringBuilder.toString().length());
+        mVideoDecoderService.setProject(0, videoEditorProjectBuilder.build());
         mVideoDecoderService.start();
       }
     });
@@ -56,6 +59,8 @@ public class TestActivity extends Activity {
     findViewById(R.id.seek).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        stringBuilder.delete(0, stringBuilder.toString().length());
+        timestamp.set(3000);
         mVideoDecoderService.seek(3);
       }
     });
@@ -63,26 +68,37 @@ public class TestActivity extends Activity {
     findViewById(R.id.stop).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        stringBuilder.delete(0, stringBuilder.toString().length());
         mVideoDecoderService.stop();
       }
     });
-    
+  
     new Thread(new Runnable() {
       @Override
       public void run() {
+        int size = 0;
         while (true) {
-          showFrame.post(new Runnable() {
-            @Override
-            public void run() {
-//              showFrame.setText(mVideoDecoderService.getRenderFrame(timestamp.get()));
-            }
-          });
+          if (mVideoDecoderService.stopped() || mVideoDecoderService.ended()) {
+            continue;
+          }
+          long startTime = System.currentTimeMillis();
+          final String frameString = mVideoDecoderService.getRenderFrame(timestamp.get() * 1f / 1000);
+          final long costTime = System.currentTimeMillis() - startTime;
+          final String finalFrameString = frameString + ",costTime:" + costTime + ",timestamp:" + timestamp.get() + ",size:" + size + "\n\n";
+          size++;
           timestamp.set(timestamp.get() + 30);
           try {
             Thread.sleep(30);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
+          showFrame.post(new Runnable() {
+            @Override
+            public void run() {
+              stringBuilder.append(finalFrameString);
+              showFrame.setText(stringBuilder.toString());
+            }
+          });
         }
       }
     }).start();

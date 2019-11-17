@@ -4,6 +4,12 @@ option optimize_for = LITE_RUNTIME;
 option java_package = "com.whensunset.wsvideoeditorsdk.model";
 option java_multiple_files = true;
 
+message Rational {
+    int64 num = 1;
+
+    int64 den = 2;
+}
+
 // 用于保存一段时间，单位是秒
 message TimeRange {
     double start = 1;
@@ -23,8 +29,18 @@ message MediaStreamHolder {
     // 编解码器的名称
     string codec_type = 3;
 
+    Rational avg_frame_rate = 4;
+
+    Rational time_base = 5;
+
+    int64 duration_ts = 6;
+
     // 视频的旋转角度
-    int32 rotation = 4;
+    int32 rotation = 7;
+
+    Rational sample_aspect_ratio = 8;
+
+    Rational guessed_frame_rate = 9;
 }
 
 // 储存一个多媒体文件的信息，减少反复解析的性能消耗

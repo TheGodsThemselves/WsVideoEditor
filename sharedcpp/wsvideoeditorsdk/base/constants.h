@@ -4,4 +4,10 @@
 const double PTS_EPS = 1e-3;
 const double TIME_EPS = 1e-3;
 
+const int PROJECT_WIDTH_ALIGNMENT = 2;
+const int PROJECT_HEIGHT_ALIGNMENT = 2;
+
+const int kShortEdge720p = 720;
+const int kLongEdge720p = 1600;
+
 #endif
