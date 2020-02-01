@@ -10,23 +10,29 @@ import com.whensunset.wsvideoeditorsdk.model.EditorProject;
  * 视频编辑 Sdk 的日志类
  */
 public class WSMediaLog {
+  private static final String TAG = "WSMediaLog TAG";
 
   private static final String NULL_STRING = "null";
 
   public static int i(String tag, String msg) {
-    return Log.i(tag, msg);
+    return Log.i(tag, TAG + msg);
   }
 
   public static int w(String tag, String msg) {
-    return Log.w(tag, msg);
+    return Log.w(tag, TAG + msg);
   }
 
+  public static int d(String tag, String msg) {
+    return Log.d(tag, TAG + msg);
+  }
+
+
   public static int e(String tag, String msg) {
-    return Log.e(tag, msg);
+    return Log.e(tag, TAG + msg);
   }
 
   public static int e(String tag, String msg, Throwable tr) {
-    return Log.e(tag, msg, tr);
+    return Log.e(tag, TAG + msg, tr);
   }
 
   @NonNull

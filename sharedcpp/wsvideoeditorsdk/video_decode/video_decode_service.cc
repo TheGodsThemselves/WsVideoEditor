@@ -428,6 +428,7 @@ namespace whensunset {
                     ret = std::move(result.second);
                     LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos between first frame and second frame pos so use first frame ret:%s",
                          ret.ToString().c_str());
+                    return ret;
                 } else {
                     LOGI("VideoDecodeService::GetRenderFrameAtPtsInternal render_pos smaller than first frame pos so return null");
                     return ret;
@@ -487,6 +488,30 @@ namespace whensunset {
                 abort();
             }
             return std::unique_ptr<VideoDecodeService>{impl};
+        }
+
+        int FrameDisplayWidth(const AVFrame *frame) {
+            int ret;
+            if (frame->sample_aspect_ratio.den != 0 && frame->sample_aspect_ratio.num != 0) {
+                ret = frame->sample_aspect_ratio.den > frame->sample_aspect_ratio.num ?
+                      frame->width * frame->sample_aspect_ratio.num / frame->sample_aspect_ratio.den
+                                                                                      : frame->width;
+            } else {
+                ret = frame->width;
+            }
+            return ret + ret % 2;
+        }
+
+        int FrameDisplayHeight(const AVFrame *frame) {
+            int ret;
+            if (frame->sample_aspect_ratio.den != 0 && frame->sample_aspect_ratio.num != 0) {
+                ret = frame->sample_aspect_ratio.den < frame->sample_aspect_ratio.num ?
+                      frame->height * frame->sample_aspect_ratio.den /
+                      frame->sample_aspect_ratio.num : frame->height;
+            } else {
+                ret = frame->height;
+            }
+            return ret + ret % 2;
         }
     }
 }

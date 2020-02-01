@@ -44,17 +44,31 @@ set(OPENGL_LIB GLESv2)
 
 aux_source_directory(${source_DIR} SOURCE_DIR_ROOT)
 list(APPEND SOURCE_DIR_ROOT
+        ${EDITORSDK2_JNI_DIR}/gl3stub_wrapper.c
+        ${EDITORSDK2_JNI_DIR}/com_whensunset_wsvideoeditorsdk_WsMediaPlayer.cc
         ${EDITORSDK2_JNI_DIR}/com_whensunset_wsvideoeditorsdk_WsVideoEditorUtils.cc
         ${EDITORSDK2_JNI_DIR}/inner/com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService.cc
         ${EDITORSDK2_JNI_DIR}/android_logger.cc
         ${EDITORSDK2_JNI_DIR}/jni_helper.cc)
 
 list(APPEND SOURCE_DIR_ROOT
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/avframe_rgba_texture_converter.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/shader_program_pool.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/yuv420_to_rgba_shader_program.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/texture_loader.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/copy_argb_shader_program.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/ws_final_draw_program.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/ws_shader_program.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/ws_texture_fbo.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl/gl_utils.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/frame_renderer.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/native_ws_media_player.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/base/av_utils.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/ws_editor_video_sdk_utils.cpp
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/preview_timeline.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/video_decode/video_decode_service.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/video_decode/video_decode_context.cpp
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/prebuilt_protobuf/ws_video_editor_sdk_android_jni.pb.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/prebuilt_protobuf/ws_video_editor_sdk.pb.cc)
 
 list(APPEND SOURCE_DIR_INCLUDE
@@ -64,6 +78,7 @@ list(APPEND SOURCE_DIR_INCLUDE
         ${protobuf_lib_DIR}/include
         ${SHARED_CPP_DIR}
         ${SHARED_CPP_DIR}/wsvideoeditorsdk
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/opengl
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/model
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/base
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/video_decode

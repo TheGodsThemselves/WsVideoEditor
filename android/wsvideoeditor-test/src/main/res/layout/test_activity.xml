@@ -22,6 +22,12 @@
     android:layout_height="wrap_content"
     android:text="stop" />
 
+  <Button
+    android:id="@+id/draw"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="draw" />
+
   <TextView
     android:id="@+id/show_state"
     android:layout_width="match_parent"

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package whensunset.wsvideoeditor.model;
+option optimize_for = LITE_RUNTIME;
+option java_multiple_files = true;
+option java_package = "com.whensunset.wsvideoeditorsdk.model.jni";
+
+import "ws_video_editor_sdk.proto";
+
+message CreateProjectNativeReturnValue {
+    EditorProject project = 1;
+    int32 error_code = 2;
+}

@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "ws_editor_video_sdk_utils.h"
 #include "preview_timeline.h"
+#include "frame_renderer.h"
 
 namespace whensunset {
     namespace wsvideoeditor {

@@ -4,7 +4,7 @@
 #include "ws_video_editor_sdk.pb.h"
 
 extern "C" {
-#include <libavformat/avformat.h>
+#include "libavformat/avformat.h"
 };
 
 
@@ -23,14 +23,13 @@ namespace whensunset {
                                              double *fps);
 
         void LimitWidthAndHeight(int original_width, int original_height, int max_short_edge,
-                                 int max_long_edge,
-                                 int width_alignment, int height_alignment, int *width_out,
+                                 int max_long_edge, int *width_out,
                                  int *height_out);
 
         void GetProjectDimensionAndFps(model::EditorProject *project, int *width, int *height,
                                        double *fps);
 
-        int GetTrackAssetRotation(const model::MediaAsset &asset);
+        int GetMediaAssetRotation(const model::MediaAsset &asset);
 
         double RationalToDouble(const model::Rational &rational);
 
@@ -39,6 +38,7 @@ namespace whensunset {
         double
         CalcMediaAssetStartTime(const model::EditorProject &project, int media_asset_index);
 
+        int GetMediaAssetIndexByRenderPos(const model::EditorProject &project, double render_pos);
 
         std::string ExtName(const std::string &str);
 
@@ -56,6 +56,14 @@ namespace whensunset {
 
         int ProjectMaxOutputLongEdge(const model::EditorProject &project);
 
+        bool IsProjectTimelineChanged(const model::EditorProject &old_prj,
+                                      const model::EditorProject &new_prj);
+
+        bool IsProjectInputTrackAssetsChanged(const model::EditorProject &old_prj,
+                                              const model::EditorProject &new_prj);
+
+        void ClearFileHolderIfAssetIdChanged(model::EditorProject &project,
+                                             const model::EditorProject &old_project);
     }
 }
 #endif

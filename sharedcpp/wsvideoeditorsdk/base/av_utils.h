@@ -4,7 +4,7 @@
 #include <string>
 
 extern "C" {
-#include <libavformat/avformat.h>
+#include "libavformat/avformat.h"
 };
 
 namespace whensunset {
@@ -69,6 +69,9 @@ namespace whensunset {
 
         inline int64_t NoPtsToZero(int64_t pts) { return pts == AV_NOPTS_VALUE ? 0 : pts; };
 
+        int FrameDisplayWidth(const AVFrame *frame);
+
+        int FrameDisplayHeight(const AVFrame *frame);
     }
 }
 #endif

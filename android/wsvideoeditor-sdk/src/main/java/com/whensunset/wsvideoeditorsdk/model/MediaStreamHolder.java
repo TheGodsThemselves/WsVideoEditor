@@ -141,24 +141,21 @@ public  final class MediaStreamHolder extends
     
     codecType_ = value.toStringUtf8();
   }
-  
+
   public static final int AVG_FRAME_RATE_FIELD_NUMBER = 4;
   private com.whensunset.wsvideoeditorsdk.model.Rational avgFrameRate_;
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
   public boolean hasAvgFrameRate() {
     return avgFrameRate_ != null;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
   public com.whensunset.wsvideoeditorsdk.model.Rational getAvgFrameRate() {
     return avgFrameRate_ == null ? com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance() : avgFrameRate_;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
@@ -168,8 +165,7 @@ public  final class MediaStreamHolder extends
     }
     avgFrameRate_ = value;
     
-  }
-  
+    }
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
@@ -178,7 +174,6 @@ public  final class MediaStreamHolder extends
     avgFrameRate_ = builderForValue.build();
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
@@ -186,38 +181,33 @@ public  final class MediaStreamHolder extends
     if (avgFrameRate_ != null &&
         avgFrameRate_ != com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance()) {
       avgFrameRate_ =
-          com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(avgFrameRate_).mergeFrom(value).buildPartial();
+        com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(avgFrameRate_).mergeFrom(value).buildPartial();
     } else {
       avgFrameRate_ = value;
     }
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
    */
-  private void clearAvgFrameRate() {
-    avgFrameRate_ = null;
+  private void clearAvgFrameRate() {  avgFrameRate_ = null;
     
   }
-  
+
   public static final int TIME_BASE_FIELD_NUMBER = 5;
   private com.whensunset.wsvideoeditorsdk.model.Rational timeBase_;
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
   public boolean hasTimeBase() {
     return timeBase_ != null;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
   public com.whensunset.wsvideoeditorsdk.model.Rational getTimeBase() {
     return timeBase_ == null ? com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance() : timeBase_;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
@@ -227,8 +217,7 @@ public  final class MediaStreamHolder extends
     }
     timeBase_ = value;
     
-  }
-  
+    }
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
@@ -237,7 +226,6 @@ public  final class MediaStreamHolder extends
     timeBase_ = builderForValue.build();
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
@@ -245,31 +233,27 @@ public  final class MediaStreamHolder extends
     if (timeBase_ != null &&
         timeBase_ != com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance()) {
       timeBase_ =
-          com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(timeBase_).mergeFrom(value).buildPartial();
+        com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(timeBase_).mergeFrom(value).buildPartial();
     } else {
       timeBase_ = value;
     }
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
    */
-  private void clearTimeBase() {
-    timeBase_ = null;
+  private void clearTimeBase() {  timeBase_ = null;
     
   }
-  
+
   public static final int DURATION_TS_FIELD_NUMBER = 6;
   private long durationTs_;
-  
   /**
    * <code>optional int64 duration_ts = 6;</code>
    */
   public long getDurationTs() {
     return durationTs_;
   }
-  
   /**
    * <code>optional int64 duration_ts = 6;</code>
    */
@@ -277,7 +261,6 @@ public  final class MediaStreamHolder extends
     
     durationTs_ = value;
   }
-  
   /**
    * <code>optional int64 duration_ts = 6;</code>
    */
@@ -285,7 +268,7 @@ public  final class MediaStreamHolder extends
     
     durationTs_ = 0L;
   }
-  
+
   public static final int ROTATION_FIELD_NUMBER = 7;
   private int rotation_;
   /**
@@ -320,24 +303,21 @@ public  final class MediaStreamHolder extends
     
     rotation_ = 0;
   }
-  
+
   public static final int SAMPLE_ASPECT_RATIO_FIELD_NUMBER = 8;
   private com.whensunset.wsvideoeditorsdk.model.Rational sampleAspectRatio_;
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
   public boolean hasSampleAspectRatio() {
     return sampleAspectRatio_ != null;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
   public com.whensunset.wsvideoeditorsdk.model.Rational getSampleAspectRatio() {
     return sampleAspectRatio_ == null ? com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance() : sampleAspectRatio_;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
@@ -347,8 +327,7 @@ public  final class MediaStreamHolder extends
     }
     sampleAspectRatio_ = value;
     
-  }
-  
+    }
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
@@ -357,7 +336,6 @@ public  final class MediaStreamHolder extends
     sampleAspectRatio_ = builderForValue.build();
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
@@ -365,38 +343,33 @@ public  final class MediaStreamHolder extends
     if (sampleAspectRatio_ != null &&
         sampleAspectRatio_ != com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance()) {
       sampleAspectRatio_ =
-          com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(sampleAspectRatio_).mergeFrom(value).buildPartial();
+        com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(sampleAspectRatio_).mergeFrom(value).buildPartial();
     } else {
       sampleAspectRatio_ = value;
     }
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
    */
-  private void clearSampleAspectRatio() {
-    sampleAspectRatio_ = null;
+  private void clearSampleAspectRatio() {  sampleAspectRatio_ = null;
     
   }
-  
+
   public static final int GUESSED_FRAME_RATE_FIELD_NUMBER = 9;
   private com.whensunset.wsvideoeditorsdk.model.Rational guessedFrameRate_;
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
   public boolean hasGuessedFrameRate() {
     return guessedFrameRate_ != null;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
   public com.whensunset.wsvideoeditorsdk.model.Rational getGuessedFrameRate() {
     return guessedFrameRate_ == null ? com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance() : guessedFrameRate_;
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
@@ -406,8 +379,7 @@ public  final class MediaStreamHolder extends
     }
     guessedFrameRate_ = value;
     
-  }
-  
+    }
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
@@ -416,7 +388,6 @@ public  final class MediaStreamHolder extends
     guessedFrameRate_ = builderForValue.build();
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
@@ -424,18 +395,16 @@ public  final class MediaStreamHolder extends
     if (guessedFrameRate_ != null &&
         guessedFrameRate_ != com.whensunset.wsvideoeditorsdk.model.Rational.getDefaultInstance()) {
       guessedFrameRate_ =
-          com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(guessedFrameRate_).mergeFrom(value).buildPartial();
+        com.whensunset.wsvideoeditorsdk.model.Rational.newBuilder(guessedFrameRate_).mergeFrom(value).buildPartial();
     } else {
       guessedFrameRate_ = value;
     }
     
   }
-  
   /**
    * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
    */
-  private void clearGuessedFrameRate() {
-    guessedFrameRate_ = null;
+  private void clearGuessedFrameRate() {  guessedFrameRate_ = null;
     
   }
 
@@ -489,27 +458,27 @@ public  final class MediaStreamHolder extends
     }
     if (avgFrameRate_ != null) {
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getAvgFrameRate());
+        .computeMessageSize(4, getAvgFrameRate());
     }
     if (timeBase_ != null) {
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getTimeBase());
+        .computeMessageSize(5, getTimeBase());
     }
     if (durationTs_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(6, durationTs_);
+        .computeInt64Size(6, durationTs_);
     }
     if (rotation_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, rotation_);
+        .computeInt32Size(7, rotation_);
     }
     if (sampleAspectRatio_ != null) {
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, getSampleAspectRatio());
+        .computeMessageSize(8, getSampleAspectRatio());
     }
     if (guessedFrameRate_ != null) {
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, getGuessedFrameRate());
+        .computeMessageSize(9, getGuessedFrameRate());
     }
     memoizedSerializedSize = size;
     return size;
@@ -718,21 +687,19 @@ public  final class MediaStreamHolder extends
       instance.setCodecTypeBytes(value);
       return this;
     }
-  
+
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
     public boolean hasAvgFrameRate() {
       return instance.hasAvgFrameRate();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
     public com.whensunset.wsvideoeditorsdk.model.Rational getAvgFrameRate() {
       return instance.getAvgFrameRate();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
@@ -740,8 +707,7 @@ public  final class MediaStreamHolder extends
       copyOnWrite();
       instance.setAvgFrameRate(value);
       return this;
-    }
-  
+      }
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
@@ -751,7 +717,6 @@ public  final class MediaStreamHolder extends
       instance.setAvgFrameRate(builderForValue);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
@@ -760,30 +725,26 @@ public  final class MediaStreamHolder extends
       instance.mergeAvgFrameRate(value);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational avg_frame_rate = 4;</code>
      */
-    public Builder clearAvgFrameRate() {
-      copyOnWrite();
+    public Builder clearAvgFrameRate() {  copyOnWrite();
       instance.clearAvgFrameRate();
       return this;
     }
-  
+
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
     public boolean hasTimeBase() {
       return instance.hasTimeBase();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
     public com.whensunset.wsvideoeditorsdk.model.Rational getTimeBase() {
       return instance.getTimeBase();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
@@ -791,8 +752,7 @@ public  final class MediaStreamHolder extends
       copyOnWrite();
       instance.setTimeBase(value);
       return this;
-    }
-  
+      }
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
@@ -802,7 +762,6 @@ public  final class MediaStreamHolder extends
       instance.setTimeBase(builderForValue);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
@@ -811,23 +770,20 @@ public  final class MediaStreamHolder extends
       instance.mergeTimeBase(value);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational time_base = 5;</code>
      */
-    public Builder clearTimeBase() {
-      copyOnWrite();
+    public Builder clearTimeBase() {  copyOnWrite();
       instance.clearTimeBase();
       return this;
     }
-  
+
     /**
      * <code>optional int64 duration_ts = 6;</code>
      */
     public long getDurationTs() {
       return instance.getDurationTs();
     }
-  
     /**
      * <code>optional int64 duration_ts = 6;</code>
      */
@@ -836,7 +792,6 @@ public  final class MediaStreamHolder extends
       instance.setDurationTs(value);
       return this;
     }
-  
     /**
      * <code>optional int64 duration_ts = 6;</code>
      */
@@ -880,21 +835,19 @@ public  final class MediaStreamHolder extends
       instance.clearRotation();
       return this;
     }
-  
+
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
     public boolean hasSampleAspectRatio() {
       return instance.hasSampleAspectRatio();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
     public com.whensunset.wsvideoeditorsdk.model.Rational getSampleAspectRatio() {
       return instance.getSampleAspectRatio();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
@@ -902,8 +855,7 @@ public  final class MediaStreamHolder extends
       copyOnWrite();
       instance.setSampleAspectRatio(value);
       return this;
-    }
-  
+      }
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
@@ -913,7 +865,6 @@ public  final class MediaStreamHolder extends
       instance.setSampleAspectRatio(builderForValue);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
@@ -922,30 +873,26 @@ public  final class MediaStreamHolder extends
       instance.mergeSampleAspectRatio(value);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational sample_aspect_ratio = 8;</code>
      */
-    public Builder clearSampleAspectRatio() {
-      copyOnWrite();
+    public Builder clearSampleAspectRatio() {  copyOnWrite();
       instance.clearSampleAspectRatio();
       return this;
     }
-  
+
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
     public boolean hasGuessedFrameRate() {
       return instance.hasGuessedFrameRate();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
     public com.whensunset.wsvideoeditorsdk.model.Rational getGuessedFrameRate() {
       return instance.getGuessedFrameRate();
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
@@ -953,8 +900,7 @@ public  final class MediaStreamHolder extends
       copyOnWrite();
       instance.setGuessedFrameRate(value);
       return this;
-    }
-  
+      }
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
@@ -964,7 +910,6 @@ public  final class MediaStreamHolder extends
       instance.setGuessedFrameRate(builderForValue);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
@@ -973,12 +918,10 @@ public  final class MediaStreamHolder extends
       instance.mergeGuessedFrameRate(value);
       return this;
     }
-  
     /**
      * <code>optional .whensunset.wsvideoeditor.model.Rational guessed_frame_rate = 9;</code>
      */
-    public Builder clearGuessedFrameRate() {
-      copyOnWrite();
+    public Builder clearGuessedFrameRate() {  copyOnWrite();
       instance.clearGuessedFrameRate();
       return this;
     }
@@ -1068,7 +1011,7 @@ public  final class MediaStreamHolder extends
                   subBuilder.mergeFrom(avgFrameRate_);
                   avgFrameRate_ = subBuilder.buildPartial();
                 }
-    
+
                 break;
               }
               case 42: {
@@ -1081,16 +1024,16 @@ public  final class MediaStreamHolder extends
                   subBuilder.mergeFrom(timeBase_);
                   timeBase_ = subBuilder.buildPartial();
                 }
-    
+
                 break;
               }
               case 48: {
-    
+
                 durationTs_ = input.readInt64();
                 break;
               }
               case 56: {
-    
+
                 rotation_ = input.readInt32();
                 break;
               }
@@ -1104,7 +1047,7 @@ public  final class MediaStreamHolder extends
                   subBuilder.mergeFrom(sampleAspectRatio_);
                   sampleAspectRatio_ = subBuilder.buildPartial();
                 }
-    
+
                 break;
               }
               case 74: {
@@ -1117,7 +1060,7 @@ public  final class MediaStreamHolder extends
                   subBuilder.mergeFrom(guessedFrameRate_);
                   guessedFrameRate_ = subBuilder.buildPartial();
                 }
-    
+
                 break;
               }
             }

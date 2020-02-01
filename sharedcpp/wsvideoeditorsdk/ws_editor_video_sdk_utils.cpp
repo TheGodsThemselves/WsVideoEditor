@@ -3,8 +3,8 @@
 #include "ws_editor_video_sdk_utils.h"
 
 extern "C" {
-#include <libavformat/avformat.h>
-#include <libavfilter/avfilter.h>
+#include "libavformat/avformat.h"
+#include "libavfilter/avfilter.h"
 };
 
 using namespace std;
@@ -61,9 +61,6 @@ namespace whensunset {
             GetProjectDimensionAndFps(project, &width, &height, &fps);
             model::EditorProjectPrivateData *private_data = project->mutable_private_data();
             private_data->set_project_duration(CalcProjectDuration(*project));
-
-            // commented out project_duration, project_width, project_height, project_fps for now
-            // project->set_project_duration(private_data->computed_duration());
             private_data->set_project_fps(fps);
             private_data->set_project_width(width);
             private_data->set_project_height(height);
@@ -75,13 +72,11 @@ namespace whensunset {
 
             // limit max project size 720p or 1080p(single image)!!!
             LimitWidthAndHeight(*width, *height, ProjectMaxOutputShortEdge(*project),
-                                ProjectMaxOutputLongEdge(*project),
-                                PROJECT_WIDTH_ALIGNMENT, PROJECT_HEIGHT_ALIGNMENT, width, height);
+                                ProjectMaxOutputLongEdge(*project), width, height);
         }
 
         void LimitWidthAndHeight(int original_width, int original_height, int max_short_edge,
-                                 int max_long_edge,
-                                 int width_alignment, int height_alignment, int *width_out,
+                                 int max_long_edge, int *width_out,
                                  int *height_out) {
             int short_edge = min(original_width, original_height);
             int long_edge = max(original_width, original_height);
@@ -97,23 +92,9 @@ namespace whensunset {
                 *height_out = original_height;
             }
 
-            if (width_alignment % 2 != 0 || height_alignment % 2 != 0 || width_alignment <= 0 ||
-                height_alignment <= 0) {
-                return;
-            }
-
-            if (width_alignment > 2 && (*width_out) % width_alignment != 0) {
-                int increment = width_alignment - (*width_out) % width_alignment;
-                (*width_out) += increment;
-                // we should keep origin ratio, instead of the size with ratio multiplied
-                (*height_out) =
-                        (original_height * (*width_out) + original_width - 1) / original_width;
-            }
-
             *width_out += (*width_out) % 2;
             *height_out += (*height_out) % 2;
         }
-
 
         void GetProjectDimensionUnAlignAndUnLimit(model::EditorProject *project, int *width,
                                                   int *height, double *fps) {
@@ -155,7 +136,7 @@ namespace whensunset {
                                 height_temp += height_temp % 2;
                             }
                         }
-                        int rotation = GetTrackAssetRotation(*asset);
+                        int rotation = GetMediaAssetRotation(*asset);
                         if (rotation == 90 || rotation == 270) {
                             swap(width_temp, height_temp);
                         }
@@ -181,7 +162,7 @@ namespace whensunset {
             }
         }
 
-        int GetTrackAssetRotation(const model::MediaAsset &asset) {
+        int GetMediaAssetRotation(const model::MediaAsset &asset) {
             if (asset.has_media_asset_file_holder()) {
                 model::MediaFileHolder holder_file = asset.media_asset_file_holder();
                 for (int i = 0; i < holder_file.streams_size(); i++) {
@@ -368,11 +349,63 @@ namespace whensunset {
         }
 
         int ProjectMaxOutputShortEdge(const model::EditorProject &project) {
-            return kShortEdge720p;
+            return ShortEdge720p;
         }
 
         int ProjectMaxOutputLongEdge(const model::EditorProject &project) {
-            return kLongEdge720p;
+            return LongEdge720p;
+        }
+
+        int GetMediaAssetIndexByRenderPos(const model::EditorProject &project, double render_pos) {
+            double sum = 0.0;
+            for (int i = 0; i < project.media_asset_size(); ++i) {
+                double duration = project.media_asset(i).media_asset_file_holder().duration();
+
+                if (sum < render_pos && render_pos < sum + duration) {
+                    return i;
+                }
+                sum += duration;
+            }
+            return project.media_asset_size() - 1;
+        }
+
+
+        bool IsProjectTimelineChanged(const model::EditorProject &old_prj,
+                                      const model::EditorProject &new_prj) {
+
+            if (new_prj.media_asset_size() != old_prj.media_asset_size()) {
+                return true;
+            }
+            return IsProjectInputTrackAssetsChanged(old_prj, new_prj);
+        }
+
+        bool IsProjectInputTrackAssetsChanged(const model::EditorProject &old_prj,
+                                              const model::EditorProject &new_prj) {
+            if (new_prj.project_id() != old_prj.project_id()) {
+                return true;
+            }
+            if (new_prj.private_data().input_media_assets_number() !=
+                old_prj.private_data().input_media_assets_number()) {
+                return true;
+            }
+            for (int i = 0; i < new_prj.private_data().input_media_assets_number(); ++i) {
+                const model::MediaAsset &new_asset = new_prj.media_asset(i);
+                const model::MediaAsset &old_asset = old_prj.media_asset(i);
+                if (new_asset.asset_path() != old_asset.asset_path()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void ClearFileHolderIfAssetIdChanged(model::EditorProject &project,
+                                             const model::EditorProject &old_project) {
+            int len = min(project.media_asset_size(), old_project.media_asset_size());
+            for (int i = 0; i < len; ++i) {
+                if (project.media_asset(i).asset_id() != old_project.media_asset(i).asset_id()) {
+                    project.mutable_media_asset(i)->clear_media_asset_file_holder();
+                }
+            }
         }
     }
 }

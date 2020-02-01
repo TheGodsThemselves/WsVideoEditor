@@ -2,6 +2,7 @@ package com.whensunset.wsvideoeditortest;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -81,7 +82,14 @@ public class TestActivity extends Activity {
         mVideoDecodeService.stop();
       }
     });
-  
+
+    findViewById(R.id.draw).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(TestActivity.this, VideoActivity.class));
+      }
+    });
+
     new Thread(new Runnable() {
       @Override
       public void run() {
