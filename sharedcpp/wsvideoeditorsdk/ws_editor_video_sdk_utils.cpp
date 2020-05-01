@@ -369,6 +369,37 @@ namespace whensunset {
             return project.media_asset_size() - 1;
         }
 
+        bool IsAudioVolumeChanged(const model::EditorProject &old_prj,
+                                  const model::EditorProject &new_prj) {
+            if (old_prj.media_asset_size() != new_prj.media_asset_size()) {
+                return true;
+            }
+            for (int i = 0; i < old_prj.media_asset_size(); ++i) {
+                if (fabs(old_prj.media_asset(i).volume() - new_prj.media_asset(i).volume()) >
+                    1e-3) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool IsAudioAssetsChanged(const model::EditorProject &old_prj,
+                                  const model::EditorProject &new_prj) {
+            if (IsProjectTimelineChanged(old_prj, new_prj)) {
+                return true;
+            }
+
+            for (int i = 0; i < old_prj.media_asset_size(); i++) {
+                for (int j = 0; j < new_prj.media_asset_size(); j++) {
+                    model::MediaAsset new_prj_track_asset = new_prj.media_asset(j);
+                    model::MediaAsset old_prj_track_asset = old_prj.media_asset(i);
+                    if (old_prj_track_asset.asset_id() == new_prj_track_asset.asset_id()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         bool IsProjectTimelineChanged(const model::EditorProject &old_prj,
                                       const model::EditorProject &new_prj) {

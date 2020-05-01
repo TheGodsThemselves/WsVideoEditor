@@ -5,6 +5,7 @@
 
 extern "C" {
 #include "libavformat/avformat.h"
+#include <libswresample/swresample.h>
 };
 
 namespace whensunset {
@@ -72,6 +73,12 @@ namespace whensunset {
         int FrameDisplayWidth(const AVFrame *frame);
 
         int FrameDisplayHeight(const AVFrame *frame);
+
+        void ReleaseAVCodecContext(AVCodecContext *ctx);
+
+        void ReleaseAVFormatContext(AVFormatContext *ctx);
+
+        void ReleaseSwrContext(SwrContext *ctx);
     }
 }
 #endif

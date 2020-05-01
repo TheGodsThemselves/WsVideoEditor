@@ -56,6 +56,12 @@ namespace whensunset {
 
         int ProjectMaxOutputLongEdge(const model::EditorProject &project);
 
+        bool IsAudioAssetsChanged(const model::EditorProject &old_prj,
+                                  const model::EditorProject &new_prj);
+
+        bool IsAudioVolumeChanged(const model::EditorProject &old_prj,
+                                  const model::EditorProject &new_prj);
+
         bool IsProjectTimelineChanged(const model::EditorProject &old_prj,
                                       const model::EditorProject &new_prj);
 

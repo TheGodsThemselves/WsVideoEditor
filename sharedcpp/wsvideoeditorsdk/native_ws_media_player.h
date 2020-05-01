@@ -4,6 +4,7 @@
 #include <deque>
 #include "libffmpeg/config.h"
 #include <atomic>
+#include <wsvideoeditorsdk/audio_decode/audio_decode_service.h>
 
 #include "video_decode_service.h"
 #include "frame_renderer.h"
@@ -13,6 +14,7 @@
 #include "opengl/avframe_rgba_texture_converter.h"
 #include "preview_timeline.h"
 #include "decode_service_common.h"
+#include "audio_player.h"
 
 namespace whensunset {
     namespace wsvideoeditor {
@@ -57,15 +59,11 @@ namespace whensunset {
                 if (seeking_) {
                     return current_time_;
                 }
-
-
-                // todo time stamp
-                return test_current_time;
+                return audio_player_->GetCurrentTimeSec(project_);
             }
 
         private:
-            // todo test code
-            double test_current_time = 0.035;
+            void UpdateReadyState(const PlayerReadyState &new_ready_state);
 
             void SeekInternal(double render_pos);
 
@@ -102,6 +100,18 @@ namespace whensunset {
             std::unique_ptr<PreviewTimeline> preview_time_line_;
 
             model::EditorProject project_;
+
+            std::unique_ptr<AudioPlayer> audio_player_;
+
+            AudioDecodeService audio_decode_service_;
+
+            RefClock audio_ref_clock_;
+
+            TimeMessageCenter time_message_center_;
+
+            PlayerReadyState ready_state_ = kHaveNothing;
+
+            std::chrono::system_clock::time_point last_have_enough_data_time_;
         };
     }
 }

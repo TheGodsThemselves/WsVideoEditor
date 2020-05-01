@@ -54,5 +54,31 @@ namespace whensunset {
             return frame;
         }
 
+        void ReleaseAVCodecContext(AVCodecContext *ctx) {
+            if (ctx) {
+                // NOTE: must avcodec_close first then release hwaccel_context, otherwise something will leak.
+                if (avcodec_is_open(ctx)) {
+                    avcodec_close(ctx);
+                }
+                if (ctx->hwaccel_context) {
+                    ctx->hwaccel = nullptr;
+                    ctx->hwaccel_context = nullptr;
+                }
+                avcodec_free_context(&ctx);
+            }
+        }
+
+        void ReleaseAVFormatContext(AVFormatContext *ctx) {
+            if (ctx) {
+                avformat_close_input(&ctx);
+            }
+        }
+
+        void ReleaseSwrContext(SwrContext *ctx) {
+            if (ctx) {
+                swr_free(&ctx);
+            }
+        }
+
     }
 }

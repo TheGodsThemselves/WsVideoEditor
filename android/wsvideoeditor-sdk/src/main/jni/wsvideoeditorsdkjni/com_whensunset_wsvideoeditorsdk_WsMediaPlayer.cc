@@ -5,20 +5,20 @@
 
 using namespace whensunset::wsvideoeditor;
 
-JNIEXPORT jlong JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_newNativePlayer
+extern "C" JNIEXPORT jlong JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_newNativePlayer
         (JNIEnv *, jobject) {
     NativeWSMediaPlayer *native_player = new(std::nothrow) NativeWSMediaPlayer;
     return (jlong) native_player;
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_deleteNativePlayer
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_deleteNativePlayer
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->OnDetachedFromController();
     delete native_player;
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_setProjectNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_setProjectNative
         (JNIEnv *env, jobject, jlong address, jbyteArray buffer) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     model::EditorProject project;
@@ -28,7 +28,7 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_setPro
     native_player->SetProject(project);
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_loadProjectNative
+extern "C" JNIEXPORT jbyteArray JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_loadProjectNative
         (JNIEnv *env, jobject, jlong address, jbyteArray buffer, jboolean force_update) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     model::EditorProject *project = new(std::nothrow) model::EditorProject();
@@ -48,7 +48,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_
     return editorsdk_jni::GetSerializedBytes(env, ret);
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_drawFrameNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_drawFrameNative
         (JNIEnv *, jobject, jlong address) {
     EGLSurface current_draw_surface = eglGetCurrentSurface(EGL_DRAW);
     EGLSurface current_read_surface = eglGetCurrentSurface(EGL_READ);
@@ -61,43 +61,43 @@ JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_drawFr
     eglMakeCurrent(current_display, current_draw_surface, current_read_surface, current_context);
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_onAttachedViewNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_onAttachedViewNative
         (JNIEnv *, jobject, jlong address, jint width, jint height) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->OnAttachedToController(width, height);
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_onDetachedViewNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_onDetachedViewNative
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->OnDetachedFromController();
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_seekNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_seekNative
         (JNIEnv *, jobject, jlong address, jdouble current_time) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->Seek(current_time);
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_playNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_playNative
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->Play();
 }
 
-JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_pauseNative
+extern "C" JNIEXPORT void JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_pauseNative
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     native_player->Pause();
 }
 
-JNIEXPORT jboolean JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_isPlayingNative
+extern "C" JNIEXPORT jboolean JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_isPlayingNative
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     return !native_player->paused();
 }
 
-JNIEXPORT jdouble JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_getCurrentTimeNative
+extern "C" JNIEXPORT jdouble JNICALL Java_com_whensunset_wsvideoeditorsdk_WsMediaPlayer_getCurrentTimeNative
         (JNIEnv *, jobject, jlong address) {
     NativeWSMediaPlayer *native_player = reinterpret_cast<NativeWSMediaPlayer *>(address);
     return native_player->current_time();

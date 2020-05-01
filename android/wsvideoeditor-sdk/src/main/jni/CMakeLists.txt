@@ -45,6 +45,7 @@ set(OPENGL_LIB GLESv2)
 aux_source_directory(${source_DIR} SOURCE_DIR_ROOT)
 list(APPEND SOURCE_DIR_ROOT
         ${EDITORSDK2_JNI_DIR}/gl3stub_wrapper.c
+        ${EDITORSDK2_JNI_DIR}/audio_player_by_android.cpp
         ${EDITORSDK2_JNI_DIR}/com_whensunset_wsvideoeditorsdk_WsMediaPlayer.cc
         ${EDITORSDK2_JNI_DIR}/com_whensunset_wsvideoeditorsdk_WsVideoEditorUtils.cc
         ${EDITORSDK2_JNI_DIR}/inner/com_whensunset_wsvideoeditorsdk_inner_VideoDecoderService.cc
@@ -68,6 +69,8 @@ list(APPEND SOURCE_DIR_ROOT
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/preview_timeline.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/video_decode/video_decode_service.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/video_decode/video_decode_context.cpp
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/audio_decode/audio_decode_context.cc
+        ${SHARED_CPP_DIR}/wsvideoeditorsdk/audio_decode/audio_decode_service.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/prebuilt_protobuf/ws_video_editor_sdk_android_jni.pb.cc
         ${SHARED_CPP_DIR}/wsvideoeditorsdk/prebuilt_protobuf/ws_video_editor_sdk.pb.cc)
 
