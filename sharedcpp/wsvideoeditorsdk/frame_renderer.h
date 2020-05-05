@@ -17,7 +17,7 @@ namespace whensunset {
     namespace wsvideoeditor {
         class FrameRenderer {
         public:
-            FrameRenderer(const std::string tag = "FrameRenderer");
+            FrameRenderer();
 
             virtual ~FrameRenderer();
 
@@ -62,9 +62,6 @@ namespace whensunset {
             int render_height_;
 
             int render_width_;
-
-            std::string tag_;
-
         };
     }
 }

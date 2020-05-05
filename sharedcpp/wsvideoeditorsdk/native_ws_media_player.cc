@@ -13,7 +13,7 @@ namespace whensunset {
         const int HAVE_ENOUGH_AUDIO_DATA_THRESHOLD = AUDIO_BUFFER_SIZE * 4;
 
         NativeWSMediaPlayer::NativeWSMediaPlayer() :
-                frame_renderer_("WSMediaPlayer"),
+                frame_renderer_(),
                 video_decode_service_(VideoDecodeServiceCreate(5)),
                 audio_decode_service_(10),
                 time_message_center_(2){
@@ -103,10 +103,10 @@ namespace whensunset {
                     current_time);
             if (!decoded_frames_unit.frame) {
                 LOGI("DrawFrame frame is empty");
-                return;
             }
-            LOGI("NativeWSMediaPlayer::DrawFrame current_time:%f, paused_:%s", current_time,
-                 BoTSt(paused_).c_str());
+            LOGI("NativeWSMediaPlayer::DrawFrame current_time:%f, paused_:%s, "
+                 "decoded_frames_unit:%s", current_time,
+                 BoTSt(paused_).c_str(), decoded_frames_unit.ToString().c_str());
 
             PlayerReadyState target_ready_state = kHaveEnoughData;
             bool should_update_ready_state = false;
@@ -136,6 +136,9 @@ namespace whensunset {
                         }
                     }
                 }
+                LOGI("NativeWSMediaPlayer::DrawFrame target_ready_state:%d, "
+                     "video_buffered_frame_count:%d, audio_buffered_data_size:%d",
+                     target_ready_state, video_buffered_frame_count, audio_buffered_data_size);
             }
             if (should_update_ready_state) {
                 UpdateReadyState(target_ready_state);

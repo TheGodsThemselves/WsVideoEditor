@@ -25,8 +25,6 @@ namespace whensunset {
 
             bool Pause() override;
 
-            bool IsAudioPlaying() override;
-
             void SetAudioPlayGetObj(GetAudioDataCallback cb) override;
 
             double GetCurrentTimeSec(const model::EditorProject &project) override;

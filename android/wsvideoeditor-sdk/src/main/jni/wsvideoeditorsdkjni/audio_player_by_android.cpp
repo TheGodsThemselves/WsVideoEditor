@@ -183,10 +183,8 @@ namespace whensunset {
             }
             AttachCurrentThreadIfNeeded attached;
             JNIEnv *env = attached.jni();
-            int ret = env->CallIntMethod(audioplay_by_audiotrack_service_(),
-                                         j_method_id_releaseAudioTrack_);
-            if (ret < 0) {
-            }
+            env->CallIntMethod(audioplay_by_audiotrack_service_(),
+                               j_method_id_releaseAudioTrack_);
         }
 
         AudioPlayByAndroid::~AudioPlayByAndroid() {
@@ -222,12 +220,6 @@ namespace whensunset {
             AttachCurrentThreadIfNeeded attached;
             JNIEnv *env = attached.jni();
             env->CallVoidMethod(audioplay_by_audiotrack_service_(), j_method_id_flushAudioTrack_);
-        }
-
-        bool AudioPlayByAndroid::IsAudioPlaying() {
-            std::lock_guard<std::mutex> lk(player_mutex_);
-            return is_inited_ && is_playing_;
-
         }
 
 

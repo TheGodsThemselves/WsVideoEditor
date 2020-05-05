@@ -31,8 +31,6 @@ namespace whensunset {
 
             virtual void Flush() = 0;
 
-            virtual bool IsAudioPlaying() = 0;
-
             virtual void SetAudioPlayGetObj(GetAudioDataCallback cb) = 0;
 
             virtual double GetCurrentTimeSec(const model::EditorProject &project) = 0;
@@ -40,11 +38,6 @@ namespace whensunset {
             void SetRefClock(RefClock *ref_clock) {
                 std::lock_guard<std::mutex> lk(clock_mutex_);
                 ref_clock_ = ref_clock;
-            }
-
-            void SetAudioParam(int samplerate, int channel) {
-                sample_rate_ = samplerate;
-                channel_config_ = channel;
             }
 
         protected:

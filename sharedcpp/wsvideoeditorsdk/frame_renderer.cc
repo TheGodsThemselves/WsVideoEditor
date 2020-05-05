@@ -10,10 +10,9 @@
 
 namespace whensunset {
     namespace wsvideoeditor {
-        FrameRenderer::FrameRenderer(const std::string tag) :
+        FrameRenderer::FrameRenderer() :
                 avframe_rgba_texture_converter_(&shader_program_pool_),
-                current_original_frame_texture_(UniqueWsTextureCreateNull()),
-                tag_(tag) {
+                current_original_frame_texture_(UniqueWsTextureCreateNull()) {
 
         }
 
@@ -46,6 +45,7 @@ namespace whensunset {
                 glClearColor(1.0, 1.0, 1.0, 1.0);
                 glClear(GL_COLOR_BUFFER_BIT);
                 CheckGlError("glClear");
+                return;
             }
             LOGI("FrameRenderer::Render is_new_frame:%s", BoTSt(is_new_frame).c_str());
             RenderInner(render_pos, is_new_frame);

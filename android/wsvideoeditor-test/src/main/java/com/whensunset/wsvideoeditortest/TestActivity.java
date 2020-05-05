@@ -25,10 +25,8 @@ public class TestActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.test_activity);
     WsVideoEditorUtils.initJni();
-    if (!EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-      EasyPermissions.requestPermissions(this, "权限", 1,
-          Manifest.permission.READ_EXTERNAL_STORAGE);
-    }
+    EasyPermissions.requestPermissions(this, "权限", 1, Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE);
     initButton();
   }
   

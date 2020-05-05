@@ -408,7 +408,7 @@ namespace whensunset {
                 bool should_use_first_frame = false;
                 auto result = decoded_unit_queue_.PopFrontIf(
                         [&](const std::vector<DecodedFramesUnit> &units) {
-                            int64_t render_pos = (int64_t) (render_sec * AV_TIME_BASE + 0.5);
+                            render_pos = (int64_t) (render_sec * AV_TIME_BASE + 0.5);
                             if (units.size() <= 1) {
                                 return false;
                             }
